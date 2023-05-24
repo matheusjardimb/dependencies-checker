@@ -2,7 +2,7 @@
   "name": "javascript-action",
   "version": "1.0.0",
   "description": "JavaScript Action Template",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
     "lint": "semistandard",
     "prepare": "ncc build lib/index.js -o dist --minify",
