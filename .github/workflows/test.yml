@@ -9,21 +9,35 @@ on:
       - main
       - feature/**
 
+env:
+  FORCE_COLOR: 2
+  NODE: 18
+
 jobs:
   # unit tests
   unit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: npm ci
-    - run: npm test
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "${{ env.NODE }}"
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Install npm dependencies
+        run: npm test
 
   # test action works running from the graph
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - run: npm ci
-    - uses: ./
-      with:
-        milliseconds: 1000
+      - uses: actions/checkout@v2
+      - run: npm ci
+      - uses: ./
+        with:
+          milliseconds: 1000
