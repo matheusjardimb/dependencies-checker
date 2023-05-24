@@ -1,13 +1,14 @@
-name: 'Wait'
-description: 'Wait a designated number of milliseconds'
+---
+name: Increment Git Tag
+description: Increments git tag based on the provided version type
 inputs:
-  milliseconds:  # id of input
-    description: 'number of milliseconds to wait'
+  version-type:
+    description: Provide version type [major, minor, patch]
     required: true
-    default: '1000'
+    default: patch
 outputs:
-  time: # output will be available to future steps
-    description: 'The message to output'
+  new-version:
+    description: Incremented version based on the input
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: node12
+  main: action/index.js

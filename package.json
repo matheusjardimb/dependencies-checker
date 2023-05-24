@@ -1,41 +1,24 @@
 {
-  "name": "javascript-action",
+  "name": "increment-git-tag",
   "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "semistandard",
-    "prepare": "ncc build lib/index.js -o dist --minify",
-    "test": "jest",
-    "all": "npm run lint && npm run prepare && npm run test"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github-developer/javascript-action.git"
+    "url": "git+https://github.com/antonputra/increment-git-tag.git"
   },
-  "keywords": [
-    "GitHub",
-    "Actions",
-    "JavaScript"
-  ],
-  "author": "opensource+github-developer/javascript-action@github.com",
-  "license": "MIT",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/github-developer/javascript-action/issues"
+    "url": "https://github.com/antonputra/increment-git-tag/issues"
   },
-  "homepage": "https://github.com/github-developer/javascript-action#readme",
+  "homepage": "https://github.com/antonputra/increment-git-tag#readme",
   "dependencies": {
-    "@actions/core": "^1.2.5"
-  },
-  "devDependencies": {
-    "@vercel/ncc": "^0.27.0",
-    "jest": "^26.6.3",
-    "nock": "^13.0.9",
-    "semistandard": "^16.0.0"
-  },
-  "semistandard": {
-    "env": [
-      "jest"
-    ]
+    "@actions/core": "^1.6.0",
+    "@actions/exec": "^1.1.0"
   }
 }
