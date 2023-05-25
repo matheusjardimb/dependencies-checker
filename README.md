@@ -16,28 +16,15 @@ versioning guidance.
 Reference the published [semantic tag](https://semver.org/), e.g. major:
 
 ```yaml
-uses: matheusjardimb/js-exact-dependency-action@v1
-with:
-  milliseconds: 1000
-```
-
-or minor:
-
-```yaml
-uses: matheusjardimb/js-exact-dependency-action@v1.0
-with:
-  milliseconds: 1000
-```
-
-or patch:
-
-```yaml
 uses: matheusjardimb/js-exact-dependency-action@v1.0.0
 with:
-  milliseconds: 1000
+  ignoredDepList: |
+    dependency1
+    dependency2
 ```
 
-See the [actions tab](https://github.com/matheusjardimb/js-exact-dependency-action/actions) for runs of this action! :rocket:
+See the [actions tab](https://github.com/matheusjardimb/js-exact-dependency-action/actions) for runs of this action! :
+rocket:
 
 ## Development
 

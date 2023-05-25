@@ -4,15 +4,11 @@ branding:
   color: "green"
   icon: "check-circle"
 inputs:
-  milliseconds: # id of input
-    description: 'number of milliseconds to wait'
-    required: true
-    default: '1000'
-outputs:
-  time: # output will be available to future steps
-    description: 'The message to output'
+  ignoredDepList:
+    description: 'A list of names of dependencies ignored by the validation.'
+    required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
 
 

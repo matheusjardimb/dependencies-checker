@@ -1,4 +1,4 @@
-const wait = require('../lib/wait');
+const wait = require('../lib/check_dependencies');
 const process = require('process');
 const cp = require('child_process');
 const path = require('path');
