@@ -1,23 +1,39 @@
-const wait = require('../lib/check_dependencies');
+const checkDependencies = require('../lib/check_dependencies');
 const process = require('process');
 const cp = require('child_process');
 const path = require('path');
 
-test('throws invalid number', async () => {
-  // await expect(wait('foo')).rejects.toThrow('milliseconds not a number');
-});
+describe('Test invalid json files', () => {
+    it('malformed_package.json should throw SyntaxError', () => {
+        expect(
+            () => checkDependencies('tests/malformed_package.json')
+        ).toThrow(SyntaxError);
+    });
 
-test('wait 500 ms', async () => {
-  // const start = new Date();
-  // await wait(500);
-  // const end = new Date();
-  // const delta = Math.abs(end - start);
-  // expect(delta).toBeGreaterThanOrEqual(500);
-});
+    it('non_existing_package.json should throw SyntaxError', () => {
+        expect(
+            () => checkDependencies('tests/non_existing_package.json')
+        ).toThrow();
+    });
 
-// shows how the runner will run a javascript action with env / stdout protocol
-test('test runs', () => {
-  // process.env.INPUT_MILLISECONDS = 500;
-  // const ip = path.join(__dirname, '../lib/index.js');
-  // console.log(cp.execSync(`node ${ip}`, { env: process.env }).toString());
-});
+    it('package_has_caret.json should throw Error', () => {
+        expect(
+            () => checkDependencies('tests/package_has_caret.json')
+        ).toThrow();
+    });
+})
+
+describe('Test valid json files', () => {
+    it('package_1.json should not throw error', () => {
+        expect(
+            () => checkDependencies('tests/package_1.json')
+        ).not.toThrow(SyntaxError);
+    });
+
+    it('package_2.json should not throw error', () => {
+        expect(
+            () => checkDependencies('tests/package_2.json')
+        ).not.toThrow(SyntaxError);
+    });
+})
+
