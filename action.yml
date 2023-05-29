@@ -4,9 +4,14 @@ branding:
   color: "green"
   icon: "check-circle"
 inputs:
-  ignoredDepList:
-    description: 'A list of names of dependencies ignored by the validation.'
+  packageJsonPath:
+    description: 'Complete path of the package.json file to be evaluated'
     required: false
+    default: 'package.json'
+  ignoredDepList:
+      description: 'A list of names of dependencies ignored by the validation.'
+      required: false
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
