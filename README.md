@@ -1,7 +1,9 @@
 # Exact dependency checker
 
 <a href="https://github.com/matheusjardimb/js-exact-dependency-action/actions"><img alt="javscript-action status" src="https://github.com/matheusjardimb/js-exact-dependency-action/actions/workflows/test.yml/badge.svg"></a>
-<a href="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"><img alt="release" src="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"></a>
+<a href="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"><img alt="release" src="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"></a> 
+![Coverage Badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/matheusjardimb/f17f5787f5b4ac05a4b5a5b73a32e446/raw/js-exact-dependency-action__heads_main.json)
+
 
 [//]: # (<a href="https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg"><img alt="Contributor Covenant" src="https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg"></a>)
 
