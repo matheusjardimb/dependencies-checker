@@ -1,4 +1,4 @@
-name: Pytest and Coverage
+name: Jest and Coverage
 
 # Coverage job was heavily inspired by https://nedbatchelder.com/blog/202209/making_a_coverage_badge.html
 
