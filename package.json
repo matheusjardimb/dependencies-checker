@@ -1,7 +1,7 @@
 {
-  "name": "javascript-action",
-  "version": "1.0.0",
-  "description": "JavaScript Action Template",
+  "name": "js-exact-dependency-action",
+  "version": "0.4.0",
+  "description": "JS exact dependency action",
   "main": "dist/index.js",
   "scripts": {
     "lint": "semistandard",
@@ -11,19 +11,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github-developer/javascript-action.git"
+    "url": "git+https://github.com/matheusjardimb/js-exact-dependency-action.git"
   },
   "keywords": [
     "GitHub",
     "Actions",
-    "JavaScript"
+    "JavaScript",
+    "Dependencies"
   ],
-  "author": "opensource+github-developer/javascript-action@github.com",
+  "author": "opensource+matheusjardimb/js-exact-dependency-action@github.com",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/github-developer/javascript-action/issues"
+    "url": "https://github.com/matheusjardimb/js-exact-dependency-action/issues"
   },
-  "homepage": "https://github.com/github-developer/javascript-action#readme",
+  "homepage": "https://github.com/matheusjardimb/js-exact-dependency-action#readme",
   "dependencies": {
     "@actions/core": "1.9.1"
   },
