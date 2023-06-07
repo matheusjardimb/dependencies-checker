@@ -6,7 +6,7 @@ name: Publish
 # Manual or automatic release
 on:
   release:
-    types: [published, edited]
+    types: [ published, edited ]
 
 jobs:
   publish:
@@ -14,16 +14,17 @@ jobs:
     steps:
       # Release with semantic tag like v1.0.3
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           ref: ${{ github.event.release.tag_name }}
-          
+
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3.6.0
+        run: npm ci && npm run build
 
       # Compile dist/index.js and bundle with action.yml
       # Force push major and minor tags, e.g. v1, v1.0
       # See documentation: https://github.com/JasonEtco/build-and-tag-action
-      - uses: JasonEtco/build-and-tag-action@v2
+      - uses: JasonEtco/build-and-tag-action@v2.0.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
