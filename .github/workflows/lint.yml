@@ -11,7 +11,7 @@ on:
       - develop
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.5.2
