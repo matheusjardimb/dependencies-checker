@@ -6,10 +6,9 @@
   "scripts": {
     "lint": "semistandard",
     "lint.fix": "semistandard --fix",
+    "pre-commit.install": "husky install",
     "prepare": "ncc build lib/index.js -o dist --minify",
     "test": "jest",
-    "pre-commit.install": "husky install",
-    "pre-commit.check": "npm run lint.fix && npm run test",
     "all": "npm run lint && npm run prepare && npm run test"
   },
   "repository": {
