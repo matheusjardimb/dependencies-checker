@@ -1,5 +1,8 @@
-name: Jest and Coverage
+##
+# Validates lint on the project
+##
 
+name: Lint
 
 on:
   pull_request:

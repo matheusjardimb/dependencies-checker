@@ -1,7 +1,9 @@
 ##
 # Close stale issues and pull requests after a configurable time period
 ##
+
 name: 'Close stale issues and PRs'
+
 on:
   schedule:
     - cron: '30 1 * * *'

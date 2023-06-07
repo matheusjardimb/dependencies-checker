@@ -1,4 +1,9 @@
+##
+# Tests the action on its own package.json
+##
+
 name: Test the action itself
+
 on:
   pull_request:
   push:
@@ -18,7 +23,3 @@ jobs:
 
       - run: npm ci
       - uses: ./
-        with:
-          ignoredDepList: |
-            dep1
-            dep2
