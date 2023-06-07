@@ -25,4 +25,5 @@ See more about licensing at [MIT](LICENSE.md).
 
 ## Contributing
 
-Pull requests are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more.
+Pull requests are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more. Please consider activating pre-commit before
+committing (`npm run pre-commit.install`).
