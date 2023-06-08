@@ -35,7 +35,7 @@ jobs:
           # GIST_TOKEN is a GitHub personal access token with scope "gist".
           auth: ${{ secrets.GIST_TOKEN }}
           gistID: f17f5787f5b4ac05a4b5a5b73a32e446
-          filename: covbadge.json
+          filename: test.json
           label: Coverage
           message: ${{ env.total }}%
           minColorRange: 50
