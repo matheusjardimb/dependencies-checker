@@ -1,5 +1,5 @@
 import {describe, expect, it, test} from '@jest/globals'
-import checkDependencies from "../src/check_dependencies";
+import checkDependencies from '../src/check_dependencies'
 
 describe('Test test_files json files', () => {
     it('malformed_package.json should throw SyntaxError', () => {
