@@ -1,5 +1,6 @@
 name: 'Exact Dependency Checker'
 description: 'Validates whether a project uses version-specific dependencies only'
+author: 'Matheus Jardim Bernardes'
 branding:
   color: "green"
   icon: "check-circle"
@@ -21,7 +22,4 @@ inputs:
 
 runs:
   using: 'node16'
-  main: 'dist/index.js'
-
-
-
+  main: 'dist/index.ts'
