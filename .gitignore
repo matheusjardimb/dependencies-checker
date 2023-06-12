@@ -1,9 +1,6 @@
 # Dependency directory
 node_modules
 
-# Compiled project files
-dist/
-
 # Editors
 .vscode/
 .idea/
@@ -103,4 +100,4 @@ Thumbs.db
 
 # Ignore built ts files
 __tests__/runner/*
-src/**/*
+lib/**/*
