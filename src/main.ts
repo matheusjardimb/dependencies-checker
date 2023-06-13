@@ -1,6 +1,5 @@
+import * as core from '@actions/core'
 import checkDependencies from './check_dependencies'
-
-import core from '@actions/core'
 
 function validateDependencies(): void {
     const packageJsonPath = core.getInput('packageJsonPath')
@@ -14,8 +13,6 @@ function validateDependencies(): void {
 
     checkDependencies(packageJsonPath, ignoredDepList, dependencyBlocksToCheck)
 }
-
-// most @actions toolkit packages have async methods
 async function run(): Promise<void> {
     try {
         validateDependencies()

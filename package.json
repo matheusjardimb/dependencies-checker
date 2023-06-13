@@ -2,7 +2,7 @@
   "name": "js-exact-dependency-action",
   "version": "0.4.0",
   "description": "JS exact dependency action",
-  "main": "src/index.ts",
+  "main": "lib/main.js",
   "scripts": {
     "pre-commit.install": "husky install",
 
