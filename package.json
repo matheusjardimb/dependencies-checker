@@ -2,10 +2,9 @@
   "name": "js-exact-dependency-action",
   "version": "0.4.0",
   "description": "JS exact dependency action",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
     "pre-commit.install": "husky install",
-
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
