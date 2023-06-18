@@ -1,22 +1,21 @@
 {
-  "name": "js-exact-dependency-action",
+  "name": "exact-dependency-checker",
   "version": "0.4.0",
   "description": "JS exact dependency action",
-  "main": "lib/main.js",
+  "main": "src/main.js",
   "scripts": {
     "pre-commit.install": "husky install",
-
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm run test"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/matheusjardimb/js-exact-dependency-action.git"
+    "url": "https://github.com/matheusjardimb/js-exact-dependency-action"
   },
   "keywords": [
     "GitHub",
@@ -50,5 +49,7 @@
     "prettier": "2.8.8",
     "ts-jest": "29.1.0",
     "typescript": "5.0.4"
-  }
+  },
+
+  "bin": "./index.js"
 }

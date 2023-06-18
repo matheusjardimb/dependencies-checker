@@ -8,12 +8,25 @@ Easily control when your project accepts only exact versions of dependencies.
 
 ## Usage
 
+### Using GitHub actions
+
 ```yaml
 uses: matheusjardimb/js-exact-dependency-action@v1.0.0
 with:
   ignoredDepList: |
     dependency1
     dependency2
+```
+
+### Using Gitlab
+
+TODO: add .gitlab-ci.yml instructions
+
+```yaml
+validate_dependencies:
+  script:
+    - npm exec github:matheusjardimb/js-exact-dependency-action
+    - npx github:matheusjardimb/js-exact-dependency-action
 ```
 
 ## License
