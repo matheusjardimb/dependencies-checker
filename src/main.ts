@@ -16,6 +16,7 @@ function validateDependencies(): void {
     checkDependencies(packageJsonPath, ignoredDepList, dependencyBlocksToCheck)
 }
 async function run(): Promise<void> {
+    core.info('Started validating dependencies')
     try {
         validateDependencies()
         core.info('Finished validating without errors!')
