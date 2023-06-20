@@ -4,6 +4,10 @@
   "description": "JS exact dependency action",
   "main": "src/main.js",
   "scripts": {
+    "testcmda": "echo \"test a\"",
+    "testcmdb": "node tasks/validate.js",
+    "testcmdc": "node tasks/print.js",
+
     "pre-commit.install": "husky install",
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
