@@ -43,8 +43,6 @@ async function main(argv_: string[]): Promise<void> {
     const {dependencyBlocksToCheck, ignoredDepList} = args
 
     checkDependencies(packageJsonFilePath, ignoredDepList, dependencyBlocksToCheck)
-
-    // await createClone(repoPath, dest, { force });
 }
 
 // eslint-disable-next-line github/no-then
