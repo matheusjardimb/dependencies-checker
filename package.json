@@ -1,13 +1,11 @@
 {
   "name": "exact-dependency-checker",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "JS exact dependency action",
-  "main": "src/main.js",
+  "main": "src/main.ts",
   "scripts": {
-    "testcmda": "echo \"test a\"",
-    "testcmdb": "node tasks/validate.js",
-    "testcmdc": "node tasks/print.js",
-
+    "cli_validate": "node src/tasks/validate.ts",
+    "cli": "node src/tasks/cli.ts",
     "pre-commit.install": "husky install",
     "build": "tsc",
     "format": "prettier --write '**/*.ts'",
@@ -54,7 +52,8 @@
     "js-yaml": "4.1.0",
     "prettier": "2.8.8",
     "ts-jest": "29.1.0",
-    "typescript": "5.0.4"
+    "typescript": "5.0.4",
+    "ts-node": "10.9.1"
   },
   "bin": "./dist/index.js"
 }

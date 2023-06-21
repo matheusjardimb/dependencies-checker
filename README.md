@@ -26,8 +26,13 @@ TODO: add .gitlab-ci.yml instructions
 ```yaml
 validate_dependencies:
   script:
+    - TODO git clone ...
+    - ts-node src/tasks/cli.ts  --packageJsonPath='packageJsonPath' --dependencyBlocksToCheck='dependencyBlocksToCheck' --ignoredDepList='ignoredDepList'
+    - 
     - npm exec github:matheusjardimb/js-exact-dependency-action
     - npx github:matheusjardimb/js-exact-dependency-action
+    - 
+    - npx --yes --package=. -c 'npm run testcmda'
 ```
 
 ## License
