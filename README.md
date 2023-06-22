@@ -1,6 +1,6 @@
 # Exact dependency checker
 
-<a href="https://github.com/matheusjardimb/js-exact-dependency-action/actions"><img alt="javscript-action status" src="https://github.com/matheusjardimb/js-exact-dependency-action/actions/workflows/test.yml/badge.svg"></a>
+<a href="https://github.com/matheusjardimb/js-exact-dependency-action/actions"><img alt="javscript-action status" src="https://github.com/matheusjardimb/js-exact-dependency-action/actions/workflows/test_coverage.yml/badge.svg"></a>
 <a href="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"><img alt="release" src="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"></a>
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/matheusjardimb/f17f5787f5b4ac05a4b5a5b73a32e446/raw/test.json)
 
@@ -25,4 +25,5 @@ See more about licensing at [MIT](LICENSE.md).
 
 ## Contributing
 
-Pull requests are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more.
+Pull requests are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more. Please consider activating pre-commit before
+committing (`npm run pre-commit.install`).
