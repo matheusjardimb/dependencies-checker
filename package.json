@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/matheusjardimb/js-exact-dependency-action#readme",
   "dependencies": {
-    "@actions/core": "1.9.1"
+    "@actions/core": "1.10.0"
   },
   "devDependencies": {
     "@vercel/ncc": "0.36.1",
