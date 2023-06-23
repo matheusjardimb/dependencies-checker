@@ -24,6 +24,8 @@ with:
 TODO: add .gitlab-ci.yml instructions
 
 ```yaml
+image: node:16.20.0
+
 validate_dependencies:
   script:
     - TODO git clone ...
