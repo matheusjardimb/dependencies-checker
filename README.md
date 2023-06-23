@@ -1,6 +1,5 @@
 # Exact dependency checker
 
-
 <a href="https://github.com/matheusjardimb/js-exact-dependency-action/actions"><img alt="javscript-action status" height="20" src="https://github.com/matheusjardimb/js-exact-dependency-action/actions/workflows/test_coverage.yml/badge.svg"></a>
 <a href="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"><img alt="release" height="20" src="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"></a>
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/matheusjardimb/f17f5787f5b4ac05a4b5a5b73a32e446/raw/test.json)
@@ -25,6 +24,8 @@ with:
 TODO: add .gitlab-ci.yml instructions
 
 ```yaml
+image: node:16.20.0
+
 validate_dependencies:
   script:
     - TODO git clone ...
