@@ -1,34 +1,35 @@
 const checkDependencies = require('../lib/check_dependencies');
-describe('Test invalid json files', () => {
+
+describe('Test test_files json files', () => {
   it('malformed_package.json should throw SyntaxError', () => {
-    expect(
-      () => checkDependencies('tests/invalid/malformed_package.json')
-    ).toThrow(SyntaxError);
+    expect(() => checkDependencies('tests/test_files/malformed_package.json', [], ['dependencies', 'devDependencies'])).toThrow(SyntaxError);
   });
 
   it('non_existing_package.json should throw SyntaxError', () => {
-    expect(
-      () => checkDependencies('tests/invalid/non_existing_package.json')
-    ).toThrow();
+    expect(() => checkDependencies('tests/test_files/non_existing_package.json', [], ['dependencies', 'devDependencies'])).toThrow();
   });
 
   it('package_has_caret.json should throw Error', () => {
-    expect(
-      () => checkDependencies('tests/invalid/package_has_caret.json')
-    ).toThrow();
+    expect(() => checkDependencies('tests/test_files/package_has_caret.json', [], ['dependencies', 'devDependencies'])).toThrow();
+  });
+
+  it('package_2.json should throw error', () => {
+    expect(() => {
+      checkDependencies('tests/test_files/package_2.json', [], ['dependencies', 'devDependencies']);
+    }).toThrow(Error);
   });
 });
 
 describe('Test valid json files', () => {
   it('package_1.json should not throw error', () => {
-    expect(
-      () => checkDependencies('tests/valid/package_1.json')
-    ).not.toThrow(SyntaxError);
+    expect(() => {
+      checkDependencies('tests/test_files/package_1.json', [], ['dependencies', 'devDependencies']);
+    }).not.toThrow(SyntaxError);
   });
 
   it('package_2.json should not throw error', () => {
-    expect(
-      () => checkDependencies('tests/valid/package_2.json')
-    ).not.toThrow(SyntaxError);
+    expect(() => {
+      checkDependencies('tests/test_files/package_2.json', [], ['dependencies']);
+    }).not.toThrow(Error);
   });
 });

@@ -8,9 +8,16 @@ inputs:
     description: 'Complete path of the package.json file to be evaluated'
     required: false
     default: 'package.json'
+  dependencyBlocksToCheck:
+    description: 'A list of dependency blocks to be checked'
+    required: false
+
+    default: |
+      dependencies
+      devDependencies
   ignoredDepList:
-      description: 'A list of names of dependencies ignored by the validation.'
-      required: false
+    description: 'A list of names of dependencies ignored by the validation.'
+    required: false
 
 runs:
   using: 'node16'
