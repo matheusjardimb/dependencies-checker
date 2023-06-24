@@ -1,7 +1,7 @@
 repo:
   - '*'
 source:
-  - lib/**/*
+  - src/**/*
 action:
   - action.yml
 tests:

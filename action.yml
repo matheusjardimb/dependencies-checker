@@ -1,8 +1,11 @@
 name: 'Exact Dependency Checker'
 description: 'Validates whether a project uses version-specific dependencies only'
+author: 'Matheus Jardim Bernardes'
+
 branding:
   color: "green"
   icon: "check-circle"
+
 inputs:
   packageJsonPath:
     description: 'Complete path of the package.json file to be evaluated'
@@ -11,7 +14,6 @@ inputs:
   dependencyBlocksToCheck:
     description: 'A list of dependency blocks to be checked'
     required: false
-
     default: |
       dependencies
       devDependencies
@@ -22,6 +24,3 @@ inputs:
 runs:
   using: 'node16'
   main: 'dist/index.js'
-
-
-
