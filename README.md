@@ -28,8 +28,10 @@ image: node:16.20.0
 
 validate_dependencies:
   script:
-    - TODO git clone ...
-    - ts-node src/tasks/cli.ts  --packageJsonPath='packageJsonPath' --dependencyBlocksToCheck='dependencyBlocksToCheck' --ignoredDepList='ignoredDepList'
+    - git clone --branch 11_npx_running https://github.com/matheusjardimb/js-exact-dependency-action.git check_dep
+    - cd check_dep
+    - npm i
+    - npx ts-node src/tasks/cli.ts  --packageJsonPath='../package.json'  --dependencyBlocksToCheck='dependencyBlocksToCheck' --ignoredDepList='ignoredDepList'
     - 
     - npm exec github:matheusjardimb/js-exact-dependency-action
     - npx github:matheusjardimb/js-exact-dependency-action
