@@ -9,7 +9,7 @@ Easily control when your project accepts only exact versions of dependencies.
 
 ## Usage
 
-### Using GitHub actions
+### GitHub actions
 
 ```yaml
 uses: matheusjardimb/js-exact-dependency-action@v1.0.0
@@ -19,24 +19,27 @@ with:
     dependency2
 ```
 
-### Using Gitlab
-
-TODO: add .gitlab-ci.yml instructions
+### Gitlab
 
 ```yaml
 image: node:16.20.0
 
 validate_dependencies:
   script:
-    - git clone --branch 11_npx_running https://github.com/matheusjardimb/js-exact-dependency-action.git check_dep
+    - git clone --branch main https://github.com/matheusjardimb/js-exact-dependency-action.git check_dep
     - cd check_dep
     - npm i
     - npx ts-node src/tasks/cli.ts  --packageJsonPath='../package.json'  --dependencyBlocksToCheck='dependencyBlocksToCheck' --ignoredDepList='ignoredDepList'
-    - 
-    - npm exec github:matheusjardimb/js-exact-dependency-action
-    - npx github:matheusjardimb/js-exact-dependency-action
-    - 
-    - npx --yes --package=. -c 'npm run testcmda'
+```
+
+### NPX (WIP)
+
+> TODO: fix npm deploy to be run via `npx`
+
+```
+npm exec github:matheusjardimb/js-exact-dependency-action
+npx github:matheusjardimb/js-exact-dependency-action
+npx --yes --package=. -c 'npm run testcmda'
 ```
 
 ## License
