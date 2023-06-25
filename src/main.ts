@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as core from '@actions/core'
 import checkDependencies from './check_dependencies'
 
@@ -14,6 +16,7 @@ function validateDependencies(): void {
     checkDependencies(packageJsonPath, ignoredDepList, dependencyBlocksToCheck)
 }
 async function run(): Promise<void> {
+    core.info('Started validating dependencies')
     try {
         validateDependencies()
         core.info('Finished validating without errors!')
