@@ -34,20 +34,11 @@ validate_dependencies:
 
 ### NPX (WIP)
 
-<<<<<<< HEAD
 ```
 export INPUT_PACKAGEJSONPATH='package.json'
 export INPUT_DEPENDENCYBLOCKSTOCHECK=''
 export INPUT_IGNOREDDEPLIST=''
 npx exact-dependency-checker@0.4.3
-=======
-> TODO: fix npm deploy to be run via `npx`
-
-```
-npm exec github:matheusjardimb/js-exact-dependency-action
-npx github:matheusjardimb/js-exact-dependency-action
-npx --yes --package=. -c 'npm run testcmda'
->>>>>>> main
 ```
 
 ## License
