@@ -1,6 +1,6 @@
 import {DependencyBlockError} from './errors'
 import * as fs from 'fs'
-import core from '@actions/core'
+import * as core from '@actions/core'
 
 // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
 
@@ -20,17 +20,22 @@ function checkDependencyList(
     ignoredDepList: string[],
     dependencyBlock: string
 ): void {
+    core.info(`Checking block '${dependencyBlock}'`)
+
     if (!(dependencyBlock in packageJson)) {
         throw new DependencyBlockError(dependencyBlock)
     }
 
     for (const [dependency, version] of Object.entries(packageJson[dependencyBlock])) {
+        const dep_label = `{ ${dependency}: ${version} }`
         if (!isValidDependency(version)) {
             if (isIgnoredDependency(dependency, ignoredDepList)) {
-                core.info(`Invalid dependency IGNORED: { ${dependency}: ${version} }`)
+                core.info(`\tInvalid dependency IGNORED: ${dep_label}`)
             } else {
-                throw new Error(`Invalid dependency: { ${dependency}: ${version} }`)
+                throw new Error(`\tInvalid dependency: ${dep_label}`)
             }
+        } else {
+            core.info(`\tDependency checked: ${dep_label}`)
         }
     }
 }
