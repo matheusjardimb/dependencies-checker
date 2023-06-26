@@ -5,7 +5,7 @@
 // Inspired by https://github.com/rdmurphy/create-clone/blob/main/src/cli.ts
 
 import mri from 'mri'
-import {dependencyBlocksToCheck_default, ignoredDepList_default, packageJsonPath_default} from '../consts'
+import {packageJsonPath_default} from '../consts'
 import checkDependencies from '../check_dependencies'
 
 const cleanup = (): void => {
@@ -31,18 +31,15 @@ process.on('uncaughtException', handleError)
 
 async function main(argv_: string[]): Promise<void> {
     const args = mri(argv_.slice(2), {
-        string: ['packageJsonPath', 'dependencyBlocksToCheck', 'ignoredDepList'],
+        string: ['packageJsonPath'],
         default: {
-            packageJsonPath: packageJsonPath_default,
-            dependencyBlocksToCheck: dependencyBlocksToCheck_default,
-            ignoredDepList: ignoredDepList_default
+            packageJsonPath: packageJsonPath_default
         }
     })
     const dest = process.cwd()
     const packageJsonFilePath = `${dest}/${args.packageJsonPath}`
-    const {dependencyBlocksToCheck, ignoredDepList} = args
 
-    checkDependencies(packageJsonFilePath, ignoredDepList, dependencyBlocksToCheck)
+    checkDependencies(packageJsonFilePath)
 }
 
 // eslint-disable-next-line github/no-then

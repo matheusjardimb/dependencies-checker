@@ -5,6 +5,9 @@
 
 name: 'Jest and Coverage'
 
+on:
+  pull_request:
+
 #on:
 #  pull_request:
 #  push:
