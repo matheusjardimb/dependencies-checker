@@ -7,14 +7,9 @@ function validateDependencies(): void {
     const packageJsonPath = core.getInput('packageJsonPath')
     core.info(`packageJsonPath: ${packageJsonPath}`)
 
-    const dependencyBlocksToCheck = core.getMultilineInput('dependencyBlocksToCheck')
-    core.info(`dependencyBlocksToCheck: ${dependencyBlocksToCheck}`)
-
-    const ignoredDepList = core.getMultilineInput('ignoredDepList')
-    core.info(`ignoredDepList: ${ignoredDepList}`)
-
-    checkDependencies(packageJsonPath, ignoredDepList, dependencyBlocksToCheck)
+    checkDependencies(packageJsonPath)
 }
+
 async function run(): Promise<void> {
     core.info('Started validating dependencies')
     try {

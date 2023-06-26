@@ -40,9 +40,15 @@ function checkDependencyList(
     }
 }
 
-function checkDependencies(packageJsonPath: string, ignoredDepList: string[], dependencyBlocksToCheck: string[]): void {
+function checkDependencies(packageJsonPath: string): void {
     const rawData = fs.readFileSync(packageJsonPath, 'utf8')
     const packageJson = JSON.parse(rawData)
+
+    const dependencyBlocksToCheck = core.getMultilineInput('dependencyBlocksToCheck')
+    core.info(`dependencyBlocksToCheck: ${dependencyBlocksToCheck}`)
+
+    const ignoredDepList = core.getMultilineInput('ignoredDepList')
+    core.info(`ignoredDepList: ${ignoredDepList}`)
 
     if (!dependencyBlocksToCheck) {
         core.error('EMPTY dependencyBlocksToCheck PROVIDED')

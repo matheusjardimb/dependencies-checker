@@ -11,12 +11,19 @@ Easily control when your project accepts only exact versions of dependencies.
 
 ### GitHub actions
 
+This action only takes one parameter: the path to the `package.json` file to be checked. This param is
+optional, and the `exact-dependency-checker` will look for the file in the same directory it runs.
+
+```yaml
+uses: matheusjardimb/js-exact-dependency-action@v1.0.0
+```
+
+Example specifying a custom path to `package.json`:
+
 ```yaml
 uses: matheusjardimb/js-exact-dependency-action@v1.0.0
 with:
-  ignoredDepList: |
-    dependency1
-    dependency2
+  packageJsonPath: 'app/package.json'
 ```
 
 ### Gitlab
@@ -26,27 +33,21 @@ image: node:16.20.0
 
 validate_dependencies:
   script:
-    - export INPUT_PACKAGEJSONPATH='package.json'
-    - export INPUT_DEPENDENCYBLOCKSTOCHECK=''
-    - export INPUT_IGNOREDDEPLIST=''
-    - npx exact-dependency-checker@0.4.3
+    - export INPUT_PACKAGEJSONPATH='package.json' # Optional
+    - npx exact-dependency-checker@0.5.0
 ```
 
 ### NPX (WIP)
 
-```
-export INPUT_PACKAGEJSONPATH='package.json'
-export INPUT_DEPENDENCYBLOCKSTOCHECK=''
-export INPUT_IGNOREDDEPLIST=''
+```shell
+export INPUT_PACKAGEJSONPATH='package.json' # Optional
 npx exact-dependency-checker@0.4.3
 ```
 
 ## License
 
-This project was originally created as a fork of
+See more about the MIT licensing at [LICENSE.md](LICENSE.md). This project was originally created as a fork of
 [github-developer/javascript-action](https://github.com/github-developer/javascript-action).
-
-See more about licensing at [MIT](LICENSE.md).
 
 ## Contributing
 
