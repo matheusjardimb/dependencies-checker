@@ -26,20 +26,19 @@ image: node:16.20.0
 
 validate_dependencies:
   script:
-    - git clone --branch main https://github.com/matheusjardimb/js-exact-dependency-action.git check_dep
-    - cd check_dep
-    - npm i
-    - npx ts-node src/tasks/cli.ts  --packageJsonPath='../package.json'  --dependencyBlocksToCheck='dependencyBlocksToCheck' --ignoredDepList='ignoredDepList'
+    - export INPUT_PACKAGEJSONPATH='package.json'
+    - export INPUT_DEPENDENCYBLOCKSTOCHECK=''
+    - export INPUT_IGNOREDDEPLIST=''
+    - npx exact-dependency-checker@0.4.3
 ```
 
 ### NPX (WIP)
 
-> TODO: fix npm deploy to be run via `npx`
-
 ```
-npm exec github:matheusjardimb/js-exact-dependency-action
-npx github:matheusjardimb/js-exact-dependency-action
-npx --yes --package=. -c 'npm run testcmda'
+export INPUT_PACKAGEJSONPATH='package.json'
+export INPUT_DEPENDENCYBLOCKSTOCHECK=''
+export INPUT_IGNOREDDEPLIST=''
+npx exact-dependency-checker@0.4.3
 ```
 
 ## License

@@ -24,25 +24,23 @@ jobs:
       - run: npm ci
       - run: npx jest --coverageReporters="json" --collectCoverage=true
 
-      # TODO only update after merging into main
-      #    if: github.ref == 'refs/heads/main'
+        if: github.event.pull_request.merged
+          - name: "Extract coverage percentage"
+            run: |
+              export TOTAL=$(npx jest --coverageReporters="text-summary" --collectCoverage=true | grep Statements | awk '{print $3}')
+              export TOTAL="${TOTAL:: -1}"
+              echo "total=$TOTAL" >> $GITHUB_ENV
+              echo "### Total coverage: ${TOTAL}%" >> $GITHUB_STEP_SUMMARY
 
-      - name: "Extract coverage percentage"
-        run: |
-          export TOTAL=$(npx jest --coverageReporters="text-summary" --collectCoverage=true | grep Statements | awk '{print $3}')
-          export TOTAL="${TOTAL:: -1}"
-          echo "total=$TOTAL" >> $GITHUB_ENV
-          echo "### Total coverage: ${TOTAL}%" >> $GITHUB_STEP_SUMMARY
-
-      - name: "Upload progress to gist, to update badge"
-        uses: schneegans/dynamic-badges-action@v1.6.0
-        with:
-          # GIST_TOKEN is a GitHub personal access token with scope "gist".
-          auth: ${{ secrets.GIST_TOKEN }}
-          gistID: f17f5787f5b4ac05a4b5a5b73a32e446
-          filename: test.json
-          label: Coverage
-          message: ${{ env.total }}%
-          minColorRange: 50
-          maxColorRange: 90
-          valColorRange: ${{ env.total }}
+          - name: "Upload progress to gist, to update badge"
+            uses: schneegans/dynamic-badges-action@v1.6.0
+            with:
+              # GIST_TOKEN is a GitHub personal access token with scope "gist".
+              auth: ${{ secrets.GIST_TOKEN }}
+              gistID: f17f5787f5b4ac05a4b5a5b73a32e446
+              filename: test.json
+              label: Coverage
+              message: ${{ env.total }}%
+              minColorRange: 50
+              maxColorRange: 90
+              valColorRange: ${{ env.total }}
