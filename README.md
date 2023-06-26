@@ -9,6 +9,18 @@ Easily control when your project accepts only exact versions of dependencies.
 
 ## Usage
 
+## Customizing
+```json
+{
+  "exact-dependency-checker": {
+    "blocks-to-check": [
+      "dependencies",
+      "devDependencies"
+    ]
+  }
+}
+```
+
 ### GitHub actions
 
 This action only takes one parameter: the path to the `package.json` file to be checked. This param is

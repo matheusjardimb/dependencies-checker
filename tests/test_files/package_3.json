@@ -1,8 +1,7 @@
 {
   "exactDependencyChecker": {
     "blocksToCheck": [
-      "dependencies",
-      "devDependencies"
+      "dependencies"
     ]
   },
   "dependencies": {
