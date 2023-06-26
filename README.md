@@ -37,7 +37,7 @@ validate_dependencies:
     - npx exact-dependency-checker@0.5.0
 ```
 
-### NPX (WIP)
+### NPX
 
 ```shell
 export INPUT_PACKAGEJSONPATH='package.json' # Optional

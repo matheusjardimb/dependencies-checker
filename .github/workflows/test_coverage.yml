@@ -24,6 +24,7 @@ jobs:
       - run: npm ci
       - run: npx jest --coverageReporters="json" --collectCoverage=true
 
+
     if: github.event.pull_request.merged
       - name: "Extract coverage percentage"
         run: |
@@ -44,4 +45,3 @@ jobs:
           minColorRange: 50
           maxColorRange: 90
           valColorRange: ${{ env.total }}
-
