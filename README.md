@@ -12,10 +12,14 @@ Easily control when your project accepts only exact versions of dependencies.
 ## Customizing
 ```json
 {
-  "exact-dependency-checker": {
-    "blocks-to-check": [
+  "exactDependencyChecker": {
+    "blocksToCheck": [
       "dependencies",
       "devDependencies"
+    ],
+    "ignoredDependencies": [
+      "husky",
+      "jest"
     ]
   }
 }
