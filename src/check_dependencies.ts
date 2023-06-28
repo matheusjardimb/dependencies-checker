@@ -1,6 +1,7 @@
-import {DependencyBlockError} from './errors'
+import {DependencyBlockError, DependencyError} from './errors'
 import * as fs from 'fs'
-import core from '@actions/core'
+import * as core from '@actions/core'
+import {blocksToCheckKey, ignoredDependenciesKey, libSettingsKey} from './consts'
 
 // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
 
@@ -15,36 +16,81 @@ function isIgnoredDependency(dependency: string, ignoredDepList: string[]): bool
 
 function checkDependencyList(
     packageJson: {
-        [index: string]: string
+        [index: string]: unknown
     },
     ignoredDepList: string[],
     dependencyBlock: string
 ): void {
+    core.info(`Checking block '${dependencyBlock}'`)
+
     if (!(dependencyBlock in packageJson)) {
-        throw new DependencyBlockError(dependencyBlock)
+        throw new DependencyError(dependencyBlock)
     }
 
-    for (const [dependency, version] of Object.entries(packageJson[dependencyBlock])) {
+    const packageJsonElement: {[index: string]: string} = packageJson[dependencyBlock] as {}
+    for (const [dependency, version] of Object.entries(packageJsonElement)) {
+        const dep_label = `{ ${dependency}: ${version} }`
         if (!isValidDependency(version)) {
             if (isIgnoredDependency(dependency, ignoredDepList)) {
-                core.info(`Invalid dependency IGNORED: { ${dependency}: ${version} }`)
+                core.info(`\tInvalid dependency IGNORED: ${dep_label}`)
             } else {
-                throw new Error(`Invalid dependency: { ${dependency}: ${version} }`)
+                throw new DependencyError(`\tInvalid dependency: ${dep_label}`)
             }
+        } else {
+            core.info(`\tDependency checked: ${dep_label}`)
         }
     }
 }
 
-function checkDependencies(packageJsonPath: string, ignoredDepList: string[], dependencyBlocksToCheck: string[]): void {
-    const rawData = fs.readFileSync(packageJsonPath, 'utf8')
-    const packageJson = JSON.parse(rawData)
+function isDependencyBlock(keyNameLower: string): boolean {
+    return (
+        (keyNameLower !== libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
+        keyNameLower.includes('dependencies')
+    )
+}
 
-    if (!dependencyBlocksToCheck) {
-        core.error('EMPTY dependencyBlocksToCheck PROVIDED')
-    } else {
-        for (const dependencyBlock of dependencyBlocksToCheck) {
-            checkDependencyList(packageJson, ignoredDepList, dependencyBlock)
+function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
+    const libSettingsValue = packageJson[libSettingsKey]
+    if (libSettingsValue !== undefined) {
+        const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
+        if (blocksToCheckValue !== undefined) {
+            return blocksToCheckValue as string[]
         }
+    }
+
+    const dependencyBlocksToCheck: string[] = []
+    for (const [entryName] of Object.entries(packageJson)) {
+        const keyNameLower = entryName.toLowerCase()
+        if (isDependencyBlock(keyNameLower)) {
+            dependencyBlocksToCheck.push(entryName)
+        }
+    }
+    return dependencyBlocksToCheck
+}
+
+function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[] {
+    if (packageJson[ignoredDependenciesKey] === undefined) {
+        core.info(`Checking all dependencies`)
+        return []
+    }
+    let ignoredDepList: string[] = []
+    ignoredDepList = packageJson[ignoredDependenciesKey]
+    core.info(`Ignoring dependencies: ${ignoredDepList}`)
+    return ignoredDepList
+}
+
+function checkDependencies(packageJsonPath: string): void {
+    const rawData = fs.readFileSync(packageJsonPath, 'utf8')
+    const packageJson: {[index: string]: undefined} = JSON.parse(rawData)
+
+    if (packageJson[libSettingsKey] === undefined) {
+        core.info(`Custom '${libSettingsKey}' block not informed, using default values`)
+    }
+    const dependencyBlocksToCheck: string[] = getBlocksToCheck(packageJson)
+    const ignoredDepList: string[] = getIgnoredDependencies(packageJson)
+
+    for (const dependencyBlock of dependencyBlocksToCheck) {
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock)
     }
 }
 
