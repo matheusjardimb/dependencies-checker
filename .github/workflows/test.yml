@@ -1,0 +1,22 @@
+##
+# Runs tests and generate project's code coverage badge
+# Coverage job was heavily inspired by https://nedbatchelder.com/blog/202209/making_a_coverage_badge.html
+##
+
+name: 'Jest'
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5.2
+
+      - uses: actions/setup-node@v3.6.0
+        with:
+          node-version: 16
+
+      - run: npm ci
+      - run: npx jest --coverageReporters="json" --collectCoverage=true
