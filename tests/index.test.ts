@@ -1,37 +1,41 @@
 import {describe, expect, it} from '@jest/globals'
 import checkDependencies from '../src/check_dependencies'
-import {DependencyError, DependencyBlockError} from '../src/errors'
+import {DependencyError} from '../src/errors'
 
-describe('Test test_files json files', () => {
-    it('malformed_package.json should throw SyntaxError', () => {
-        expect(() => checkDependencies('tests/test_files/malformed_package.json')).toThrow(SyntaxError)
+describe('Test invalid json files', () => {
+    it('invalid_malformed.json should throw SyntaxError', () => {
+        expect(() => checkDependencies('tests/test_files/invalid_malformed.json')).toThrow(SyntaxError)
     })
 
-    it('non_existing_package.json should throw SyntaxError', () => {
+    it('non_existing_package.json should throw Error', () => {
         expect(() => checkDependencies('tests/test_files/non_existing_package.json')).toThrow()
     })
 
-    it('package_has_caret.json should throw Error', () => {
-        expect(() => checkDependencies('tests/test_files/package_has_caret.json')).toThrow(DependencyError)
+    it('invalid_has_caret.json should throw DependencyError', () => {
+        expect(() => checkDependencies('tests/test_files/invalid_has_caret.json')).toThrow(DependencyError)
     })
 
-    it('package_2.json should throw error', () => {
+    it('invalid_has_tilde.json should throw DependencyError', () => {
+        expect(() => checkDependencies('tests/test_files/invalid_has_tilde.json')).toThrow(DependencyError)
+    })
+
+    it('invalid_settings.json should throw error', () => {
         expect(() => {
-            checkDependencies('tests/test_files/package_2.json')
+            checkDependencies('tests/test_files/invalid_settings.json')
         }).toThrow(Error)
     })
 })
 
 describe('Test valid json files', () => {
-    it('package_1.json should not throw error', () => {
+    it('valid_without_settings.json should not throw error', () => {
         expect(() => {
-            checkDependencies('tests/test_files/package_1.json')
-        }).not.toThrow(SyntaxError)
+            checkDependencies('tests/test_files/valid_without_settings.json')
+        }).not.toThrow()
     })
 
-    it('package_3.json should not throw error', () => {
+    it('valid_with_settings.json should not throw error', () => {
         expect(() => {
-            checkDependencies('tests/test_files/package_3.json')
-        }).not.toThrow(Error)
+            checkDependencies('tests/test_files/valid_with_settings.json')
+        }).not.toThrow()
     })
 })
