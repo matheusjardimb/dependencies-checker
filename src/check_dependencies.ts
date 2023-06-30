@@ -1,4 +1,4 @@
-import {DependencyBlockError, DependencyError} from './errors'
+import {DependencyBlockNotFoundError, InvalidDependencyError} from './errors'
 import * as fs from 'fs'
 import * as core from '@actions/core'
 import {blocksToCheckKey, ignoredDependenciesKey, libSettingsKey} from './consts'
@@ -15,29 +15,27 @@ function isIgnoredDependency(dependency: string, ignoredDepList: string[]): bool
 }
 
 function checkDependencyList(
-    packageJson: {
-        [index: string]: unknown
-    },
+    packageJson: {[index: string]: unknown},
     ignoredDepList: string[],
-    dependencyBlock: string
+    dependencyBlockKey: string
 ): void {
-    core.info(`Checking block '${dependencyBlock}'`)
+    core.info(`Checking block '${dependencyBlockKey}'`)
 
-    if (!(dependencyBlock in packageJson)) {
-        throw new DependencyError(dependencyBlock)
+    if (packageJson[dependencyBlockKey] === undefined) {
+        throw new DependencyBlockNotFoundError(dependencyBlockKey)
     }
 
-    const packageJsonElement: {[index: string]: string} = packageJson[dependencyBlock] as {}
-    for (const [dependency, version] of Object.entries(packageJsonElement)) {
+    const dependencyBlock: {[index: string]: string} = packageJson[dependencyBlockKey] as {}
+    for (const [dependency, version] of Object.entries(dependencyBlock)) {
         const dep_label = `{ ${dependency}: ${version} }`
-        if (!isValidDependency(version)) {
+        if (isValidDependency(version)) {
+            core.info(`\tDependency checked: ${dep_label}`)
+        } else {
             if (isIgnoredDependency(dependency, ignoredDepList)) {
                 core.info(`\tInvalid dependency IGNORED: ${dep_label}`)
             } else {
-                throw new DependencyError(`\tInvalid dependency: ${dep_label}`)
+                throw new InvalidDependencyError(`\tInvalid dependency: ${dep_label}`)
             }
-        } else {
-            core.info(`\tDependency checked: ${dep_label}`)
         }
     }
 }
@@ -52,31 +50,33 @@ function isDependencyBlock(keyName: string): boolean {
 
 function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
     const libSettingsValue = packageJson[libSettingsKey]
-    if (libSettingsValue === undefined) {
-        const dependencyBlocksToCheck: string[] = []
-        for (const [entryName] of Object.entries(packageJson)) {
-            if (isDependencyBlock(entryName)) {
-                dependencyBlocksToCheck.push(entryName)
-            }
+    if (libSettingsValue !== undefined) {
+        const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
+        if (blocksToCheckValue !== undefined) {
+            return blocksToCheckValue as string[]
         }
-        return dependencyBlocksToCheck
     }
 
-    const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
-    if (blocksToCheckValue !== undefined) {
-        return blocksToCheckValue as string[]
+    const dependencyBlocksToCheck: string[] = []
+    for (const [entryName] of Object.entries(packageJson)) {
+        if (isDependencyBlock(entryName)) {
+            dependencyBlocksToCheck.push(entryName)
+        }
     }
+    return dependencyBlocksToCheck
 }
 
 function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[] {
-    if (packageJson[ignoredDependenciesKey] === undefined) {
-        core.info(`Checking all dependencies`)
-        return []
+    const libSettingsValue = packageJson[libSettingsKey]
+    if (libSettingsValue !== undefined) {
+        const ignoredDependencies = libSettingsValue[ignoredDependenciesKey] as string[]
+        if (ignoredDependencies !== undefined) {
+            core.info(`Ignoring dependencies ${ignoredDependencies}`)
+            return ignoredDependencies
+        }
     }
-    let ignoredDepList: string[] = []
-    ignoredDepList = packageJson[ignoredDependenciesKey]
-    core.info(`Ignoring dependencies: ${ignoredDepList}`)
-    return ignoredDepList
+    core.info(`Checking all dependencies`)
+    return []
 }
 
 function checkDependencies(packageJsonPath: string): void {
