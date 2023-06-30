@@ -11,7 +11,7 @@ function isValidDependency(dep: string): boolean {
 }
 
 function isIgnoredDependency(dependency: string, ignoredDepList: string[]): boolean {
-    return dependency in ignoredDepList
+    return ignoredDepList.includes(dependency)
 }
 
 function checkDependencyList(

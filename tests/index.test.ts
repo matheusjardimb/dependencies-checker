@@ -26,13 +26,18 @@ describe('Test invalid json files', () => {
     })
 })
 
-const valid_json_files = ['valid_without_settings.json', 'valid_with_settings.json']
+const valid_json_files = [
+    'valid_single_block_without_settings.json',
+    'valid_multi_block_without_settings.json',
+    'valid_ignore_block.json',
+    'valid_ignore_dependency.json'
+]
 
 describe('Test valid json files', () => {
     for (const file_name of valid_json_files) {
         it(`${file_name} should not throw error`, () => {
             expect(() => {
-                checkDependencies('tests/test_files/valid_without_settings.json')
+                checkDependencies(`tests/test_files/${file_name}`)
             }).not.toThrow()
         })
     }
