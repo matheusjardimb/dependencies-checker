@@ -1,6 +1,12 @@
-import {DependencyBlockNotFoundError, InvalidDependencyError, InvalidPackageFileError} from './errors'
+import {
+    DependencyBlockNotFoundError,
+    DuplicateDependencyError,
+    InvalidDependencyError,
+    InvalidPackageFileError
+} from './errors'
 import * as fs from 'fs'
 import * as core from '@actions/core'
+import findDuplicatedPropertyKeys from 'find-duplicated-property-keys'
 import {blocksToCheckKey, ignoredDependenciesKey, libSettingsKey} from './consts'
 
 function isValidDependency(dep: string): boolean {
@@ -31,9 +37,10 @@ function isIgnoredDependency(dependency: string, ignoredDepList: string[]): bool
 }
 
 function checkDependencyList(
-    packageJson: {[index: string]: unknown},
+    packageJson: {[p: string]: unknown},
     ignoredDepList: string[],
-    dependencyBlockKey: string
+    dependencyBlockKey: string,
+    allDependencies: string[]
 ): void {
     core.info(`Checking block '${dependencyBlockKey}'`)
 
@@ -45,12 +52,16 @@ function checkDependencyList(
     for (const [dependency, version] of Object.entries(dependencyBlock)) {
         const dep_label = `{ ${dependency}: ${version} }`
         if (isValidDependency(version)) {
+            if (allDependencies.includes(dependency)) {
+                throw new DuplicateDependencyError(dependency)
+            }
+            allDependencies.push(dependency)
             core.info(`\tDependency checked: ${dep_label}`)
         } else {
             if (isIgnoredDependency(dependency, ignoredDepList)) {
                 core.info(`\tInvalid dependency IGNORED: ${dep_label}`)
             } else {
-                throw new InvalidDependencyError(`\tInvalid dependency: ${dep_label}`)
+                throw new InvalidDependencyError(dep_label)
             }
         }
     }
@@ -95,15 +106,16 @@ function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[]
     return []
 }
 
-function read_package_json_file(packageJsonPath: string): {[index: string]: undefined} {
+function read_package_json_file(packageJsonPath: string): (string | any)[] {
     const rawData = fs.readFileSync(packageJsonPath, 'utf8')
-    return JSON.parse(rawData)
+    return [rawData, JSON.parse(rawData)]
 }
 
 function checkDependencies(packageJsonPath: string): void {
     let packageJson
+    let rawData
     try {
-        packageJson = read_package_json_file(packageJsonPath)
+        ;[rawData, packageJson] = read_package_json_file(packageJsonPath)
     } catch (e) {
         throw new InvalidPackageFileError(packageJsonPath)
     }
@@ -114,8 +126,14 @@ function checkDependencies(packageJsonPath: string): void {
     const dependencyBlocksToCheck: string[] = getBlocksToCheck(packageJson)
     const ignoredDepList: string[] = getIgnoredDependencies(packageJson)
 
+    const result = findDuplicatedPropertyKeys(rawData)
+    if (result.length > 0) {
+        throw new DuplicateDependencyError(result[0]['key'])
+    }
+
+    const allDependencies: string[] = []
     for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock)
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies)
     }
 }
 

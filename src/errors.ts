@@ -15,3 +15,9 @@ export class InvalidPackageFileError extends Error {
         super(`Invalid input file: '${fileName}'`)
     }
 }
+
+export class DuplicateDependencyError extends Error {
+    constructor(dependency: string) {
+        super(`Duplicated dependency found: '${dependency}'`)
+    }
+}
