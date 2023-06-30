@@ -2,10 +2,10 @@
 
 import * as core from '@actions/core'
 import checkDependencies from './check_dependencies'
-import {packageJsonPath_default} from './consts'
+import {packageJsonPath_default, packageJsonPathKey} from './consts'
 
 function validateDependencies(): void {
-    let packageJsonPath = core.getInput('packageJsonPath')
+    let packageJsonPath = core.getInput(packageJsonPathKey)
     if (packageJsonPath) {
         core.info(`Reading ${packageJsonPath}`)
     } else {

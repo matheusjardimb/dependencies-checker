@@ -2,7 +2,7 @@ const libSettingsKey = 'exactDependencyChecker'
 const blocksToCheckKey = 'blocksToCheck'
 const ignoredDependenciesKey = 'ignoredDependencies'
 
-const packageJsonPath = 'packageJsonPath'
+const packageJsonPathKey = 'packageJsonPath'
 const packageJsonPath_default = 'package.json'
 
 const dependencyBlocksToCheck = 'dependencyBlocksToCheck'
@@ -15,7 +15,7 @@ export {
     libSettingsKey,
     blocksToCheckKey,
     ignoredDependenciesKey,
-    packageJsonPath,
+    packageJsonPathKey,
     packageJsonPath_default,
     dependencyBlocksToCheck,
     dependencyBlocksToCheck_default,
