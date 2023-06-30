@@ -42,7 +42,8 @@ function checkDependencyList(
     }
 }
 
-function isDependencyBlock(keyNameLower: string): boolean {
+function isDependencyBlock(keyName: string): boolean {
+    const keyNameLower = keyName.toLowerCase()
     return (
         (keyNameLower !== libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
         keyNameLower.includes('dependencies')
@@ -51,21 +52,20 @@ function isDependencyBlock(keyNameLower: string): boolean {
 
 function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
     const libSettingsValue = packageJson[libSettingsKey]
-    if (libSettingsValue !== undefined) {
-        const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
-        if (blocksToCheckValue !== undefined) {
-            return blocksToCheckValue as string[]
+    if (libSettingsValue === undefined) {
+        const dependencyBlocksToCheck: string[] = []
+        for (const [entryName] of Object.entries(packageJson)) {
+            if (isDependencyBlock(entryName)) {
+                dependencyBlocksToCheck.push(entryName)
+            }
         }
+        return dependencyBlocksToCheck
     }
 
-    const dependencyBlocksToCheck: string[] = []
-    for (const [entryName] of Object.entries(packageJson)) {
-        const keyNameLower = entryName.toLowerCase()
-        if (isDependencyBlock(keyNameLower)) {
-            dependencyBlocksToCheck.push(entryName)
-        }
+    const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
+    if (blocksToCheckValue !== undefined) {
+        return blocksToCheckValue as string[]
     }
-    return dependencyBlocksToCheck
 }
 
 function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[] {
