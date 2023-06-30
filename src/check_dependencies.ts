@@ -1,13 +1,29 @@
-import {DependencyBlockNotFoundError, InvalidDependencyError} from './errors'
+import {DependencyBlockNotFoundError, InvalidDependencyError, InvalidPackageFileError} from './errors'
 import * as fs from 'fs'
 import * as core from '@actions/core'
 import {blocksToCheckKey, ignoredDependenciesKey, libSettingsKey} from './consts'
 
-// https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
-
 function isValidDependency(dep: string): boolean {
     // TODO: this method can be drastically improved, leaving this way just for testing
-    return !(dep.includes('^') || dep.includes('~') || dep.includes('>') || dep.includes('<'))
+    return !(
+        dep === '' ||
+        dep.includes('latest') ||
+        dep.includes('^') ||
+        dep.includes('~') ||
+        dep.includes('x') ||
+        dep.includes('*') ||
+        dep.includes('>') ||
+        dep.includes('<') ||
+        dep.includes('|') ||
+        dep.includes('-')
+    )
+    // TODO: consider evaluating url dependencies
+    // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
+    // http://... See 'URLs as Dependencies' below
+    // git... See 'Git URLs as Dependencies' below
+    // user/repo See 'GitHub URLs' below
+    // tag A specific version tagged and published as tag See npm dist-tag
+    // path/path/path See Local Paths bel
 }
 
 function isIgnoredDependency(dependency: string, ignoredDepList: string[]): boolean {
@@ -79,9 +95,18 @@ function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[]
     return []
 }
 
-function checkDependencies(packageJsonPath: string): void {
+function read_package_json_file(packageJsonPath: string): {[index: string]: undefined} {
     const rawData = fs.readFileSync(packageJsonPath, 'utf8')
-    const packageJson: {[index: string]: undefined} = JSON.parse(rawData)
+    return JSON.parse(rawData)
+}
+
+function checkDependencies(packageJsonPath: string): void {
+    let packageJson
+    try {
+        packageJson = read_package_json_file(packageJsonPath)
+    } catch (e) {
+        throw new InvalidPackageFileError(packageJsonPath)
+    }
 
     if (packageJson[libSettingsKey] === undefined) {
         core.info(`Custom '${libSettingsKey}' block not informed, using default values`)

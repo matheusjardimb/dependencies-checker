@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@actions/core": "1.9.1"
+  },
+  "devDependencies": {
+    "nock": "13.0.1||13.0.2",
+    "semistandard": "16.0.0"
+  }
+}

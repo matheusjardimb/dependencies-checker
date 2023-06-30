@@ -9,3 +9,9 @@ export class InvalidDependencyError extends Error {
         super(`Dependency invalid: '${dependency}'`)
     }
 }
+
+export class InvalidPackageFileError extends Error {
+    constructor(fileName: string) {
+        super(`Invalid input file: '${fileName}'`)
+    }
+}
