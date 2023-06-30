@@ -26,16 +26,14 @@ describe('Test invalid json files', () => {
     })
 })
 
-describe('Test valid json files', () => {
-    it('valid_without_settings.json should not throw error', () => {
-        expect(() => {
-            checkDependencies('tests/test_files/valid_without_settings.json')
-        }).not.toThrow()
-    })
+const valid_json_files = ['valid_without_settings.json', 'valid_with_settings.json']
 
-    it('valid_with_settings.json should not throw error', () => {
-        expect(() => {
-            checkDependencies('tests/test_files/valid_with_settings.json')
-        }).not.toThrow()
-    })
+describe('Test valid json files', () => {
+    for (const file_name of valid_json_files) {
+        it(`${file_name} should not throw error`, () => {
+            expect(() => {
+                checkDependencies('tests/test_files/valid_without_settings.json')
+            }).not.toThrow()
+        })
+    }
 })
