@@ -1,6 +1,6 @@
 {
   "name": "exact-dependency-checker",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "JS exact dependency action",
   "main": "src/main.ts",
   "scripts": {
