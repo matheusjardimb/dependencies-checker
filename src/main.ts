@@ -10,7 +10,7 @@ function validateDependencies(): void {
         core.info(`Reading ${packageJsonPath}`)
     } else {
         packageJsonPath = packageJsonPath_default
-        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default`)
+        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default!`)
     }
 
     checkDependencies(packageJsonPath)
