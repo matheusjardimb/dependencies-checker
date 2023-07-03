@@ -32,9 +32,7 @@ jobs:
         run: npm ci
 
       - name: Rebuild the dist/ directory
-        run: |
-          npm run build
-          npm run package
+        run: npm run all
 
       - name: Compare the expected and actual dist/ directories
         run: |
@@ -45,7 +43,7 @@ jobs:
           fi
         id: diff
 
-      # If index.ts was different than expected, upload the expected version as an artifact
+      # If index.ts was different from expected, upload the expected version as an artifact
       - uses: actions/upload-artifact@v3.1.2
         if: ${{ failure() && steps.diff.conclusion == 'failure' }}
         with:
