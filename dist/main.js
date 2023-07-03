@@ -46,7 +46,7 @@ function validateDependencies() {
     }
     else {
         packageJsonPath = consts_1.packageJsonPath_default;
-        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default!`);
+        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default`);
     }
     (0, check_dependencies_1.default)(packageJsonPath);
 }
