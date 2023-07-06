@@ -1,0 +1,14 @@
+on:
+  workflow_dispatch:
+    
+jobs:
+  job1:    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Stage
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://api.github.com/repos/ruchika-jain/my-action/dispatches'
+          method: 'POST'
+          customHeaders: '{"Accept": "application/vnd.github+json", "Authorization": "Bearer ${{ github.token }}"}'
+          data: '{"event_type":"actions-package-migrate","client_payload":{"release":{"tag_name":"0.1.0", "id":"82995930"}}}'

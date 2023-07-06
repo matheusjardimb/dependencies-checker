@@ -1,0 +1,31 @@
+name: 'print-token'
+on: # rebuild any PRs and main branch changes
+  pull_request:
+#   push:
+#     branches:
+#       - main
+#       - 'releases/*'
+  workflow_dispatch:
+  release: 
+
+jobs:
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out!
+        uses: actions/checkout@v3
+  
+      - name: Install Oras
+        run: |
+          curl -LO https://github.com/oras-project/oras/releases/download/v0.12.0/oras_0.12.0_linux_amd64.tar.gz
+          mkdir -p oras-install/
+          tar -zxf oras_0.12.0_*.tar.gz -C oras-install/
+          mv oras-install/oras /usr/local/bin/
+          rm -rf oras_0.12.0_*.tar.gz oras-install/
+          echo "Oras installed!"
+          
+      - name: Running action   
+        uses: ruchika-jain/package-action@main
+        id: publish-action
+
+     

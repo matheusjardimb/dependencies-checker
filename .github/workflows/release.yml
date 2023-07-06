@@ -1,0 +1,36 @@
+name: 'publish-action'
+on: # rebuild any PRs and main branch changes
+  release:
+    types: [created]
+  repository_dispatch:
+    types: [actions-package-migrate]
+
+jobs:
+  package-and-publish: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+#      - name: Release event
+#        if: github.event_name == 'release'
+#        run: echo "tag_name=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+        
+#      - name: Migration event
+#        if: github.event_name == 'repository_dispatch'
+#        run: echo "tag_name=${{ github.event.client_payload.release.tag_name }}" >> $GITHUB_ENV
+                  
+#      - name: Invalid tag exception
+#        if: env.tag_name == ''
+#        run: exit 1
+        
+     - name: Checking out!
+       uses: actions/checkout@v3
+       with:
+           ref: ${{ env.tag_name }}
+     - name: Print github context payload
+       run: echo '${{ toJSON(github) }}'
+        
+     - name: Publish action 
+       uses: actions-on-packages/package-action@0.4.1
+#        with: 
+#            path: 'dist/'
+        
+        
