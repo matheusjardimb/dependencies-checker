@@ -9,37 +9,37 @@ import {packageJsonPath_default} from '../consts'
 import checkDependencies from '../check_dependencies'
 
 const cleanup = (): void => {
-    console.log('Cleaning up.')
+  console.log('Cleaning up.')
 }
 
 const handleExit = (): void => {
-    cleanup()
-    console.log('Exiting without error.')
-    process.exit()
+  cleanup()
+  console.log('Exiting without error.')
+  process.exit()
 }
 
 const handleError = (e: Error): void => {
-    console.error('ERROR! An error was encountered while executing')
-    console.error(e)
-    cleanup()
-    console.log('Exiting with error.')
-    process.exit(1)
+  console.error('ERROR! An error was encountered while executing')
+  console.error(e)
+  cleanup()
+  console.log('Exiting with error.')
+  process.exit(1)
 }
 
 process.on('SIGINT', handleExit)
 process.on('uncaughtException', handleError)
 
 async function main(argv_: string[]): Promise<void> {
-    const args = mri(argv_.slice(2), {
-        string: ['packageJsonPath'],
-        default: {
-            packageJsonPath: packageJsonPath_default
-        }
-    })
-    const dest = process.cwd()
-    const packageJsonFilePath = `${dest}/${args.packageJsonPath}`
+  const args = mri(argv_.slice(2), {
+    string: ['packageJsonPath'],
+    default: {
+      packageJsonPath: packageJsonPath_default
+    }
+  })
+  const dest = process.cwd()
+  const packageJsonFilePath = `${dest}/${args.packageJsonPath}`
 
-    checkDependencies(packageJsonFilePath)
+  checkDependencies(packageJsonFilePath)
 }
 
 // eslint-disable-next-line github/no-then

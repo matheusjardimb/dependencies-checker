@@ -13,24 +13,6 @@
     "test": "jest",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm run test"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/matheusjardimb/js-exact-dependency-action"
-  },
-  "keywords": [
-    "GitHub",
-    "Actions",
-    "JavaScript",
-    "Dependencies"
-  ],
-  "author": {
-    "name": "Matheus Jardim Bernardes",
-    "url": "https://matheusjardimb.com/"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/matheusjardimb/js-exact-dependency-action/issues"
-  },
-  "homepage": "https://github.com/matheusjardimb/js-exact-dependency-action#readme",
+
   "bin": "./dist/main.js"
 }

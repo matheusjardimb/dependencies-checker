@@ -1,18 +1,29 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import checkDependencies from './check_dependencies'
+import {packageJsonPath_default, packageJsonPathKey} from './consts'
+
+function validateDependencies(): void {
+  let packageJsonPath = core.getInput(packageJsonPathKey)
+  if (packageJsonPath) {
+    core.info(`Reading ${packageJsonPath}`)
+  } else {
+    packageJsonPath = packageJsonPath_default
+    core.info(
+      `Parameter packageJsonPath not informed, reading ${packageJsonPath} by default`
+    )
+  }
+
+  checkDependencies(packageJsonPath)
+}
 
 async function run(): Promise<void> {
+  core.info('Started validating dependencies')
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_STEP_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    validateDependencies()
+    core.info('Finished validating without errors!')
   } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
+    core.error(error as Error)
+    core.setFailed(error as Error)
   }
 }
 

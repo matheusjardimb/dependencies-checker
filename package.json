@@ -3,7 +3,25 @@
   "version": "0.8.1",
   "description": "JS exact dependency action",
   "private": false,
-
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/matheusjardimb/js-exact-dependency-action"
+  },
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "JavaScript",
+    "Dependencies"
+  ],
+  "author": {
+    "name": "Matheus Jardim Bernardes",
+    "url": "https://matheusjardimb.com/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/matheusjardimb/js-exact-dependency-action/issues"
+  },
+  "homepage": "https://github.com/matheusjardimb/js-exact-dependency-action#readme",
   "main": "lib/main.js",
   "scripts": {
     "pre-commit.install": "husky install",
@@ -15,17 +33,6 @@
     "test": "jest",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
-  },
-  "keywords": [
-    "actions",
-    "node",
-    "setup"
-  ],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "@actions/core": "1.10.0",
     "find-duplicated-property-keys": "1.2.9"
