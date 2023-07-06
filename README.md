@@ -1,105 +1,71 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# Exact dependency checker
 
-# Create a JavaScript Action using TypeScript
+<a href="https://github.com/matheusjardimb/js-exact-dependency-action/actions"><img alt="javscript-action status" height="20" src="https://github.com/matheusjardimb/js-exact-dependency-action/actions/workflows/test_coverage.yml/badge.svg"></a>
+<a href="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"><img alt="release" height="20" src="https://img.shields.io/github/v/release/matheusjardimb/js-exact-dependency-action"></a>
+![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/matheusjardimb/f17f5787f5b4ac05a4b5a5b73a32e446/raw/test.json)
+<a href="https://www.npmjs.com/package/exact-dependency-checker"><img src="https://badge.fury.io/js/exact-dependency-checker.svg" alt="npm version" height="20"></a>
 
-Use this template to bootstrap the creation of a TypeScript action.:rocket:
+Easily control when your project accepts only exact versions of dependencies.
 
-This template includes compilation support, tests, a validation workflow, publishing, and versioning guidance.  
+## Usage
 
-If you are new, there's also a simpler introduction.  See the [Hello World JavaScript Action](https://github.com/actions/hello-world-javascript-action)
-
-## Create an action from this template
-
-Click the `Use this Template` and provide the new repo details for your action
-
-## Code in Main
-
-> First, you'll need to have a reasonably modern version of `node` handy. This won't work with versions older than 9, for instance.
-
-Install the dependencies  
-```bash
-$ npm install
-```
-
-Build the typescript and package it for distribution
-```bash
-$ npm run build && npm run package
-```
-
-Run the tests :heavy_check_mark:  
-```bash
-$ npm test
-
- PASS  ./index.test.js
-  ✓ throws invalid number (3ms)
-  ✓ wait 500 ms (504ms)
-  ✓ test runs (95ms)
-
-...
-```
-
-## Change action.yml
-
-The action.yml defines the inputs and output for your action.
-
-Update the action.yml with your name, description, inputs and outputs for your action.
-
-See the [documentation](https://help.github.com/en/articles/metadata-syntax-for-github-actions)
-
-## Change the Code
-
-Most toolkit and CI/CD operations involve async operations so the action is run in an async function.
-
-```javascript
-import * as core from '@actions/core';
-...
-
-async function run() {
-  try { 
-      ...
-  } 
-  catch (error) {
-    core.setFailed(error.message);
+## Customizing
+```json
+{
+  "exactDependencyChecker": {
+    "blocksToCheck": [
+      "dependencies",
+      "devDependencies"
+    ],
+    "ignoredDependencies": [
+      "husky",
+      "jest"
+    ]
   }
 }
-
-run()
 ```
 
-See the [toolkit documentation](https://github.com/actions/toolkit/blob/master/README.md#packages) for the various packages.
+### GitHub actions
 
-## Publish to a distribution branch
-
-Actions are run from GitHub repos so we will checkin the packed dist folder. 
-
-Then run [ncc](https://github.com/zeit/ncc) and push the results:
-```bash
-$ npm run package
-$ git add dist
-$ git commit -a -m "prod dependencies"
-$ git push origin releases/v1
-```
-
-Note: We recommend using the `--license` option for ncc, which will create a license file for all of the production node modules used in your project.
-
-Your action is now published! :rocket: 
-
-See the [versioning documentation](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md)
-
-## Validate
-
-You can now validate the action by referencing `./` in a workflow in your repo (see [test.yml](.github/workflows/test.yml))
+This action only takes one parameter: the path to the `package.json` file to be checked. This param is
+optional, and the `exact-dependency-checker` will look for the file in the same directory it runs.
 
 ```yaml
-uses: ./
-with:
-  milliseconds: 1000
+uses: matheusjardimb/js-exact-dependency-action@v1.0.0
 ```
 
-See the [actions tab](https://github.com/actions/typescript-action/actions) for runs of this action! :rocket:
+Example specifying a custom path to `package.json`:
 
-## Usage:
+```yaml
+uses: matheusjardimb/js-exact-dependency-action@v1.0.0
+with:
+  packageJsonPath: 'app/package.json'
+```
 
-After testing you can [create a v1 tag](https://github.com/actions/toolkit/blob/master/docs/action-versioning.md) to reference the stable and latest V1 action
+### Gitlab
+
+```yaml
+image: node:16.20.0
+
+validate_dependencies:
+  script:
+    - export INPUT_PACKAGEJSONPATH='package.json' # Optional
+    - npx exact-dependency-checker@0.5.0
+```
+
+### NPX
+
+```shell
+export INPUT_PACKAGEJSONPATH='package.json' # Optional
+npx exact-dependency-checker@0.4.3
+```
+
+## License
+
+See more about the MIT licensing at [LICENSE.md](LICENSE.md). This project was originally created as a fork of
+[github-developer/javascript-action](https://github.com/github-developer/javascript-action).
+
+## Contributing
+
+Pull requests are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for more. Please consider activating pre-commit before
+committing (`npm run pre-commit.install`).

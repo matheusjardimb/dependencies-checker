@@ -4,7 +4,58 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="765931ac-2abc-4aed-afa4-42ea9717d6d6" name="Changes" comment="" />
+    <list default="true" id="765931ac-2abc-4aed-afa4-42ea9717d6d6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.husky/pre-commit" beforeDir="false" afterPath="$PROJECT_DIR$/.husky/pre-commit" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.husky/tagger.sh" beforeDir="false" afterPath="$PROJECT_DIR$/.husky/tagger.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.nvmrc" beforeDir="false" afterPath="$PROJECT_DIR$/.nvmrc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/CODE_OF_CONDUCT.md" beforeDir="false" afterPath="$PROJECT_DIR$/CODE_OF_CONDUCT.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/LICENSE.md" beforeDir="false" afterPath="$PROJECT_DIR$/LICENSE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/SECURITY.md" beforeDir="false" afterPath="$PROJECT_DIR$/SECURITY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/check_dependencies.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/consts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/errors.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/index.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/licenses.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/sourcemap-register.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/tasks/cli.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/dist/utils.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/old/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_asterisk.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_asterisk.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_caret.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_caret.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_empty_version.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_empty_version.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_greater.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_greater.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_greater_equal.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_greater_equal.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_latest.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_latest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_less.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_less.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_less_equal.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_less_equal.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_option.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_option.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_range.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_range.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_tilde.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_tilde.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_dependencies/invalid_has_x.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_dependencies/invalid_has_x.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_duplicate_dependencies.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_duplicate_dependencies.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_duplicate_dependencies/invalid_duplicate_different_block.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_duplicate_dependencies/invalid_duplicate_different_block.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_duplicate_dependencies/invalid_duplicate_same_block.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_duplicate_dependencies/invalid_duplicate_same_block.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_files.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_files.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_files/invalid_empty.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_files/invalid_empty.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_files/invalid_malformed.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_files/invalid_malformed.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_settings.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_settings.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/invalid_settings/invalid_missing_dependency_block.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/invalid_settings/invalid_missing_dependency_block.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/valid_files.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/valid_files.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/valid_files/valid_ignore_block.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/valid_files/valid_ignore_block.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/valid_files/valid_ignore_dependency.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/valid_files/valid_ignore_dependency.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/valid_files/valid_ignore_duplicate.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/valid_files/valid_ignore_duplicate.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/valid_files/valid_multi_block_without_settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/valid_files/valid_multi_block_without_settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/tests/valid_files/valid_single_block_without_settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/__tests__/valid_files/valid_single_block_without_settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -23,9 +74,6 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
-  </component>
-  <component name="PackageJsonUpdateNotifier">
-    <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectId" id="2QAowxQYPt6UpBxeFYRwi9tAAeL" />
   <component name="ProjectLevelVcsManager">
@@ -68,11 +116,11 @@
       <recent name="$PROJECT_DIR$/tests/invalid_duplicate_dependencies" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/__tests__" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/ts-my-action" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/tests/invalid_settings" />
-      <recent name="$PROJECT_DIR$/src/errors" />
     </key>
   </component>
   <component name="RunManager" selected="Jest.Test invalid duplicate dependencies">
@@ -195,7 +243,7 @@
       <workItem from="1688090258687" duration="19220000" />
       <workItem from="1688410658161" duration="5831000" />
       <workItem from="1688582871125" duration="8986000" />
-      <workItem from="1688667474597" duration="1784000" />
+      <workItem from="1688667474597" duration="3122000" />
     </task>
     <servers />
   </component>
