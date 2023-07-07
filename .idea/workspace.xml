@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="765931ac-2abc-4aed-afa4-42ea9717d6d6" name="Changes" comment="" />
+    <list default="true" id="765931ac-2abc-4aed-afa4-42ea9717d6d6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/check-dist.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/check-dist.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/codeql-analysis.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/codeql-analysis.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.prettierrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/.prettierrc.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CODEOWNERS" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.github/labeler.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/labeler.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.github/workflows/check-dist.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.github/workflows/codeql-analysis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/old/.prettierrc.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tasks/cli.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tasks/cli.ts" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,10 +51,10 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "gh__action__fix",
+    "git-widget-placeholder": "Merging gh__action__fix",
     "javascript.nodejs.core.library.configured.version": "16.20.0",
     "javascript.nodejs.core.library.typings.version": "16.18.35",
-    "last_opened_file_path": "/home/matheusjardimb/workspace/personal/js-exact-dependency-action/ts-my-action/__tests__",
+    "last_opened_file_path": "/home/matheusjardimb/workspace/personal/js-exact-dependency-action/.github/workflows",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
@@ -58,18 +73,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$/ts-my-action/__tests__" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$/tests/valid_files" />
       <recent name="$PROJECT_DIR$/tests/invalid_duplicate_dependencies" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/.github" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/__tests__" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/ts-my-action" />
-      <recent name="$PROJECT_DIR$/tests/invalid_settings" />
     </key>
   </component>
   <component name="RunManager" selected="Jest.Test invalid duplicate dependencies">
@@ -192,18 +207,12 @@
       <workItem from="1688090258687" duration="19220000" />
       <workItem from="1688410658161" duration="5831000" />
       <workItem from="1688582871125" duration="8986000" />
-      <workItem from="1688667474597" duration="6290000" />
+      <workItem from="1688667474597" duration="6792000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/old/src/main.js" />
-        <option value="$PROJECT_DIR$/old/src/tasks/cli.js" />
-      </list>
-    </option>
   </component>
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ID_ORDER">

@@ -12,13 +12,13 @@ const ignoredDepList = 'ignoredDepList'
 const ignoredDepList_default = ['']
 
 export {
-  libSettingsKey,
-  blocksToCheckKey,
-  ignoredDependenciesKey,
-  packageJsonPathKey,
-  packageJsonPath_default,
-  dependencyBlocksToCheck,
-  dependencyBlocksToCheck_default,
-  ignoredDepList,
-  ignoredDepList_default
+    libSettingsKey,
+    blocksToCheckKey,
+    ignoredDependenciesKey,
+    packageJsonPathKey,
+    packageJsonPath_default,
+    dependencyBlocksToCheck,
+    dependencyBlocksToCheck_default,
+    ignoredDepList,
+    ignoredDepList_default
 }
