@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import * as core from '@actions/core'
 import checkDependencies from './check_dependencies'
 import {packageJsonPath_default, packageJsonPathKey} from './consts'
