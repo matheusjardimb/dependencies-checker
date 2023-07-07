@@ -1,6 +1,293 @@
-#!/usr/bin/env node
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
+
+/***/ 286:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const errors_1 = __nccwpck_require__(292);
+const fs = __importStar(__nccwpck_require__(147));
+const core = __importStar(__nccwpck_require__(186));
+const find_duplicated_property_keys_1 = __importDefault(__nccwpck_require__(392));
+const consts_1 = __nccwpck_require__(831);
+function isValidDependency(dep) {
+    // TODO: this method can be drastically improved, leaving this way just for testing
+    return !(dep === '' ||
+        dep.includes('latest') ||
+        dep.includes('^') ||
+        dep.includes('~') ||
+        dep.includes('x') ||
+        dep.includes('*') ||
+        dep.includes('>') ||
+        dep.includes('<') ||
+        dep.includes('|') ||
+        dep.includes('-'));
+    // TODO: consider evaluating url dependencies
+    // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
+    // http://... See 'URLs as Dependencies' below
+    // git... See 'Git URLs as Dependencies' below
+    // user/repo See 'GitHub URLs' below
+    // tag A specific version tagged and published as tag See npm dist-tag
+    // path/path/path See Local Paths bel
+}
+function isIgnoredDependency(dependency, ignoredDepList) {
+    return ignoredDepList.includes(dependency);
+}
+function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, allDependencies) {
+    core.info(`Checking block '${dependencyBlockKey}'`);
+    if (packageJson[dependencyBlockKey] === undefined) {
+        throw new errors_1.DependencyBlockNotFoundError(dependencyBlockKey);
+    }
+    const dependencyBlock = packageJson[dependencyBlockKey];
+    for (const [dependency, version] of Object.entries(dependencyBlock)) {
+        const dep_label = `{ ${dependency}: ${version} }`;
+        if (isValidDependency(version)) {
+            if (allDependencies.includes(dependency)) {
+                throw new errors_1.DuplicateDependencyError(dependency);
+            }
+            allDependencies.push(dependency);
+            core.info(`\tDependency checked: ${dep_label}`);
+        }
+        else {
+            if (isIgnoredDependency(dependency, ignoredDepList)) {
+                core.info(`\tInvalid dependency IGNORED: ${dep_label}`);
+            }
+            else {
+                throw new errors_1.InvalidDependencyError(dep_label);
+            }
+        }
+    }
+}
+function isDependencyBlock(keyName) {
+    const keyNameLower = keyName.toLowerCase();
+    return ((keyNameLower !== consts_1.libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
+        keyNameLower.includes('dependencies'));
+}
+function getBlocksToCheck(packageJson) {
+    const libSettingsValue = packageJson[consts_1.libSettingsKey];
+    if (libSettingsValue !== undefined) {
+        const blocksToCheckValue = libSettingsValue[consts_1.blocksToCheckKey];
+        if (blocksToCheckValue !== undefined) {
+            return blocksToCheckValue;
+        }
+    }
+    const dependencyBlocksToCheck = [];
+    for (const [entryName] of Object.entries(packageJson)) {
+        if (isDependencyBlock(entryName)) {
+            dependencyBlocksToCheck.push(entryName);
+        }
+    }
+    return dependencyBlocksToCheck;
+}
+function getIgnoredDependencies(packageJson) {
+    const libSettingsValue = packageJson[consts_1.libSettingsKey];
+    if (libSettingsValue !== undefined) {
+        const ignoredDependencies = libSettingsValue[consts_1.ignoredDependenciesKey];
+        if (ignoredDependencies !== undefined) {
+            core.info(`Ignoring dependencies ${ignoredDependencies}`);
+            return ignoredDependencies;
+        }
+    }
+    core.info(`Checking all dependencies`);
+    return [];
+}
+function read_package_json_file(packageJsonPath) {
+    const rawData = fs.readFileSync(packageJsonPath, 'utf8');
+    return [rawData, JSON.parse(rawData)];
+}
+function checkDependencies(packageJsonPath) {
+    let packageJson;
+    let rawData;
+    try {
+        ;
+        [rawData, packageJson] = read_package_json_file(packageJsonPath);
+    }
+    catch (e) {
+        throw new errors_1.InvalidPackageFileError(packageJsonPath);
+    }
+    if (packageJson[consts_1.libSettingsKey] === undefined) {
+        core.info(`Custom '${consts_1.libSettingsKey}' block not informed, using default values`);
+    }
+    const dependencyBlocksToCheck = getBlocksToCheck(packageJson);
+    const ignoredDepList = getIgnoredDependencies(packageJson);
+    const result = (0, find_duplicated_property_keys_1.default)(rawData);
+    if (result.length > 0) {
+        throw new errors_1.DuplicateDependencyError(result[0]['key']);
+    }
+    const allDependencies = [];
+    for (const dependencyBlock of dependencyBlocksToCheck) {
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies);
+    }
+}
+exports["default"] = checkDependencies;
+
+
+/***/ }),
+
+/***/ 831:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ignoredDepList_default = exports.ignoredDepList = exports.dependencyBlocksToCheck_default = exports.dependencyBlocksToCheck = exports.packageJsonPath_default = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.libSettingsKey = void 0;
+const libSettingsKey = 'exactDependencyChecker';
+exports.libSettingsKey = libSettingsKey;
+const blocksToCheckKey = 'blocksToCheck';
+exports.blocksToCheckKey = blocksToCheckKey;
+const ignoredDependenciesKey = 'ignoredDependencies';
+exports.ignoredDependenciesKey = ignoredDependenciesKey;
+const packageJsonPathKey = 'packageJsonPath';
+exports.packageJsonPathKey = packageJsonPathKey;
+const packageJsonPath_default = 'package.json';
+exports.packageJsonPath_default = packageJsonPath_default;
+const dependencyBlocksToCheck = 'dependencyBlocksToCheck';
+exports.dependencyBlocksToCheck = dependencyBlocksToCheck;
+const dependencyBlocksToCheck_default = ['dependencies', 'devDependencies'];
+exports.dependencyBlocksToCheck_default = dependencyBlocksToCheck_default;
+const ignoredDepList = 'ignoredDepList';
+exports.ignoredDepList = ignoredDepList;
+const ignoredDepList_default = [''];
+exports.ignoredDepList_default = ignoredDepList_default;
+
+
+/***/ }),
+
+/***/ 292:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DuplicateDependencyError = exports.InvalidPackageFileError = exports.InvalidDependencyError = exports.DependencyBlockNotFoundError = void 0;
+class DependencyBlockNotFoundError extends Error {
+    constructor(dependencyBlock) {
+        super(`Dependencies block not found: '${dependencyBlock}'`);
+    }
+}
+exports.DependencyBlockNotFoundError = DependencyBlockNotFoundError;
+class InvalidDependencyError extends Error {
+    constructor(dependency) {
+        super(`Dependency invalid: '${dependency}'`);
+    }
+}
+exports.InvalidDependencyError = InvalidDependencyError;
+class InvalidPackageFileError extends Error {
+    constructor(fileName) {
+        super(`Invalid input file: '${fileName}'`);
+    }
+}
+exports.InvalidPackageFileError = InvalidPackageFileError;
+class DuplicateDependencyError extends Error {
+    constructor(dependency) {
+        super(`Duplicated dependency found: '${dependency}'`);
+    }
+}
+exports.DuplicateDependencyError = DuplicateDependencyError;
+
+
+/***/ }),
+
+/***/ 109:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(186));
+const check_dependencies_1 = __importDefault(__nccwpck_require__(286));
+const consts_1 = __nccwpck_require__(831);
+function validateDependencies() {
+    let packageJsonPath = core.getInput(consts_1.packageJsonPathKey);
+    if (packageJsonPath) {
+        core.info(`Reading ${packageJsonPath}`);
+    }
+    else {
+        packageJsonPath = consts_1.packageJsonPath_default;
+        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default`);
+    }
+    (0, check_dependencies_1.default)(packageJsonPath);
+}
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info('Started validating dependencies');
+        try {
+            validateDependencies();
+            core.info('Finished validating without errors!');
+        }
+        catch (error) {
+            core.error(error);
+            core.setFailed(error);
+        }
+    });
+}
+run();
+
+
+/***/ }),
 
 /***/ 351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
@@ -2939,294 +3226,6 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 999:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const errors_1 = __nccwpck_require__(976);
-const fs = __importStar(__nccwpck_require__(147));
-const core = __importStar(__nccwpck_require__(186));
-const find_duplicated_property_keys_1 = __importDefault(__nccwpck_require__(392));
-const consts_1 = __nccwpck_require__(176);
-function isValidDependency(dep) {
-    // TODO: this method can be drastically improved, leaving this way just for testing
-    return !(dep === '' ||
-        dep.includes('latest') ||
-        dep.includes('^') ||
-        dep.includes('~') ||
-        dep.includes('x') ||
-        dep.includes('*') ||
-        dep.includes('>') ||
-        dep.includes('<') ||
-        dep.includes('|') ||
-        dep.includes('-'));
-    // TODO: consider evaluating url dependencies
-    // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
-    // http://... See 'URLs as Dependencies' below
-    // git... See 'Git URLs as Dependencies' below
-    // user/repo See 'GitHub URLs' below
-    // tag A specific version tagged and published as tag See npm dist-tag
-    // path/path/path See Local Paths bel
-}
-function isIgnoredDependency(dependency, ignoredDepList) {
-    return ignoredDepList.includes(dependency);
-}
-function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, allDependencies) {
-    core.info(`Checking block '${dependencyBlockKey}'`);
-    if (packageJson[dependencyBlockKey] === undefined) {
-        throw new errors_1.DependencyBlockNotFoundError(dependencyBlockKey);
-    }
-    const dependencyBlock = packageJson[dependencyBlockKey];
-    for (const [dependency, version] of Object.entries(dependencyBlock)) {
-        const dep_label = `{ ${dependency}: ${version} }`;
-        if (isValidDependency(version)) {
-            if (allDependencies.includes(dependency)) {
-                throw new errors_1.DuplicateDependencyError(dependency);
-            }
-            allDependencies.push(dependency);
-            core.info(`\tDependency checked: ${dep_label}`);
-        }
-        else {
-            if (isIgnoredDependency(dependency, ignoredDepList)) {
-                core.info(`\tInvalid dependency IGNORED: ${dep_label}`);
-            }
-            else {
-                throw new errors_1.InvalidDependencyError(dep_label);
-            }
-        }
-    }
-}
-function isDependencyBlock(keyName) {
-    const keyNameLower = keyName.toLowerCase();
-    return ((keyNameLower !== consts_1.libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
-        keyNameLower.includes('dependencies'));
-}
-function getBlocksToCheck(packageJson) {
-    const libSettingsValue = packageJson[consts_1.libSettingsKey];
-    if (libSettingsValue !== undefined) {
-        const blocksToCheckValue = libSettingsValue[consts_1.blocksToCheckKey];
-        if (blocksToCheckValue !== undefined) {
-            return blocksToCheckValue;
-        }
-    }
-    const dependencyBlocksToCheck = [];
-    for (const [entryName] of Object.entries(packageJson)) {
-        if (isDependencyBlock(entryName)) {
-            dependencyBlocksToCheck.push(entryName);
-        }
-    }
-    return dependencyBlocksToCheck;
-}
-function getIgnoredDependencies(packageJson) {
-    const libSettingsValue = packageJson[consts_1.libSettingsKey];
-    if (libSettingsValue !== undefined) {
-        const ignoredDependencies = libSettingsValue[consts_1.ignoredDependenciesKey];
-        if (ignoredDependencies !== undefined) {
-            core.info(`Ignoring dependencies ${ignoredDependencies}`);
-            return ignoredDependencies;
-        }
-    }
-    core.info(`Checking all dependencies`);
-    return [];
-}
-function read_package_json_file(packageJsonPath) {
-    const rawData = fs.readFileSync(packageJsonPath, 'utf8');
-    return [rawData, JSON.parse(rawData)];
-}
-function checkDependencies(packageJsonPath) {
-    let packageJson;
-    let rawData;
-    try {
-        ;
-        [rawData, packageJson] = read_package_json_file(packageJsonPath);
-    }
-    catch (e) {
-        throw new errors_1.InvalidPackageFileError(packageJsonPath);
-    }
-    if (packageJson[consts_1.libSettingsKey] === undefined) {
-        core.info(`Custom '${consts_1.libSettingsKey}' block not informed, using default values`);
-    }
-    const dependencyBlocksToCheck = getBlocksToCheck(packageJson);
-    const ignoredDepList = getIgnoredDependencies(packageJson);
-    const result = (0, find_duplicated_property_keys_1.default)(rawData);
-    if (result.length > 0) {
-        throw new errors_1.DuplicateDependencyError(result[0]['key']);
-    }
-    const allDependencies = [];
-    for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies);
-    }
-}
-exports["default"] = checkDependencies;
-
-
-/***/ }),
-
-/***/ 176:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ignoredDepList_default = exports.ignoredDepList = exports.dependencyBlocksToCheck_default = exports.dependencyBlocksToCheck = exports.packageJsonPath_default = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.libSettingsKey = void 0;
-const libSettingsKey = 'exactDependencyChecker';
-exports.libSettingsKey = libSettingsKey;
-const blocksToCheckKey = 'blocksToCheck';
-exports.blocksToCheckKey = blocksToCheckKey;
-const ignoredDependenciesKey = 'ignoredDependencies';
-exports.ignoredDependenciesKey = ignoredDependenciesKey;
-const packageJsonPathKey = 'packageJsonPath';
-exports.packageJsonPathKey = packageJsonPathKey;
-const packageJsonPath_default = 'package.json';
-exports.packageJsonPath_default = packageJsonPath_default;
-const dependencyBlocksToCheck = 'dependencyBlocksToCheck';
-exports.dependencyBlocksToCheck = dependencyBlocksToCheck;
-const dependencyBlocksToCheck_default = ['dependencies', 'devDependencies'];
-exports.dependencyBlocksToCheck_default = dependencyBlocksToCheck_default;
-const ignoredDepList = 'ignoredDepList';
-exports.ignoredDepList = ignoredDepList;
-const ignoredDepList_default = [''];
-exports.ignoredDepList_default = ignoredDepList_default;
-
-
-/***/ }),
-
-/***/ 976:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DuplicateDependencyError = exports.InvalidPackageFileError = exports.InvalidDependencyError = exports.DependencyBlockNotFoundError = void 0;
-class DependencyBlockNotFoundError extends Error {
-    constructor(dependencyBlock) {
-        super(`Dependencies block not found: '${dependencyBlock}'`);
-    }
-}
-exports.DependencyBlockNotFoundError = DependencyBlockNotFoundError;
-class InvalidDependencyError extends Error {
-    constructor(dependency) {
-        super(`Dependency invalid: '${dependency}'`);
-    }
-}
-exports.InvalidDependencyError = InvalidDependencyError;
-class InvalidPackageFileError extends Error {
-    constructor(fileName) {
-        super(`Invalid input file: '${fileName}'`);
-    }
-}
-exports.InvalidPackageFileError = InvalidPackageFileError;
-class DuplicateDependencyError extends Error {
-    constructor(dependency) {
-        super(`Duplicated dependency found: '${dependency}'`);
-    }
-}
-exports.DuplicateDependencyError = DuplicateDependencyError;
-
-
-/***/ }),
-
-/***/ 399:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__nccwpck_require__(186));
-const check_dependencies_1 = __importDefault(__nccwpck_require__(999));
-const consts_1 = __nccwpck_require__(176);
-function validateDependencies() {
-    let packageJsonPath = core.getInput(consts_1.packageJsonPathKey);
-    if (packageJsonPath) {
-        core.info(`Reading ${packageJsonPath}`);
-    }
-    else {
-        packageJsonPath = consts_1.packageJsonPath_default;
-        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default`);
-    }
-    (0, check_dependencies_1.default)(packageJsonPath);
-}
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.info('Started validating dependencies');
-        try {
-            validateDependencies();
-            core.info('Finished validating without errors!');
-        }
-        catch (error) {
-            core.error(error);
-            core.setFailed(error);
-        }
-    });
-}
-run();
-
-
-/***/ }),
-
 /***/ 491:
 /***/ ((module) => {
 
@@ -3357,7 +3356,7 @@ module.exports = require("util");
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(399);
+/******/ 	var __webpack_exports__ = __nccwpck_require__(109);
 /******/ 	module.exports = __webpack_exports__;
 /******/ 	
 /******/ })()

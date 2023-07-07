@@ -1,21 +1,8 @@
 {
   "name": "exact-dependency-checker",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "JS exact dependency action",
-  "main": "src/main.ts",
-  "scripts": {
-    "cli_validate": "node src/tasks/validate.ts",
-    "cli": "node src/tasks/cli.ts",
-    "pre-commit.install": "husky install",
-    "build": "tsc",
-    "format": "prettier --write '**/*.ts'",
-    "format-check": "prettier --check '**/*.ts'",
-    "lint": "eslint src/**/*.ts",
-    "package": "ncc build --source-map --license licenses.txt",
-    "prepare": "ncc build src/main.ts -o dist --minify",
-    "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm run package && npm run test"
-  },
+  "private": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/matheusjardimb/js-exact-dependency-action"
@@ -35,6 +22,18 @@
     "url": "https://github.com/matheusjardimb/js-exact-dependency-action/issues"
   },
   "homepage": "https://github.com/matheusjardimb/js-exact-dependency-action#readme",
+  "main": "lib/main.js",
+  "scripts": {
+    "prepare": "ncc build src/main.ts -o dist --minify",
+    "pre-commit.install": "husky install",
+    "build": "tsc",
+    "format": "prettier --write '**/*.ts'",
+    "format-check": "prettier --check '**/*.ts'",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license LICENSE.md",
+    "test": "jest",
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+  },
   "dependencies": {
     "@actions/core": "1.10.0",
     "find-duplicated-property-keys": "1.2.9"

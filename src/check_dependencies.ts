@@ -106,7 +106,7 @@ function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[]
     return []
 }
 
-function read_package_json_file(packageJsonPath: string): (string | any)[] {
+function read_package_json_file(packageJsonPath: string): [string, {[p: string]: undefined}] {
     const rawData = fs.readFileSync(packageJsonPath, 'utf8')
     return [rawData, JSON.parse(rawData)]
 }
