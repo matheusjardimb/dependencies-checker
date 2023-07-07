@@ -88,8 +88,7 @@ function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, al
 }
 function isDependencyBlock(keyName) {
     const keyNameLower = keyName.toLowerCase();
-    return ((keyNameLower !== consts_1.libSettingsKey.toLowerCase() &&
-        keyNameLower.includes('dependency')) ||
+    return ((keyNameLower !== consts_1.libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
         keyNameLower.includes('dependencies'));
 }
 function getBlocksToCheck(packageJson) {
