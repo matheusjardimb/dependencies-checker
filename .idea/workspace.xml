@@ -5,27 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="765931ac-2abc-4aed-afa4-42ea9717d6d6" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/action.yml" beforeDir="false" afterPath="$PROJECT_DIR$/action.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/.prettierignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/action.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/jest.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/old/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/check_dependencies.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/check_dependencies.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/check_dependencies.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/check_dependencies.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/consts.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/consts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/consts.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/consts.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/errors.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/errors.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/errors.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/errors.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/main.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/tasks/cli.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/tasks/cli.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/tasks/cli.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/tasks/cli.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/utils.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/old/src/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dist/index.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/dist/index.js.map" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,7 +197,7 @@
       <workItem from="1688090258687" duration="19220000" />
       <workItem from="1688410658161" duration="5831000" />
       <workItem from="1688582871125" duration="8986000" />
-      <workItem from="1688667474597" duration="4019000" />
+      <workItem from="1688667474597" duration="5917000" />
     </task>
     <servers />
   </component>
