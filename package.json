@@ -1,6 +1,6 @@
 {
   "name": "dependencies-checker",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "JS dependencies checker",
   "private": false,
   "repository": {

@@ -1,4 +1,4 @@
-name: 'Exact Dependency Checker'
+name: 'Dependencies Checker'
 description: 'Validates whether a project uses version-specific dependencies only'
 author: 'Matheus Jardim Bernardes'
 
