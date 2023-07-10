@@ -3,7 +3,7 @@
 # Coverage job was heavily inspired by https://nedbatchelder.com/blog/202209/making_a_coverage_badge.html
 ##
 
-name: 'Jest and Coverage'
+name: 'Coverage'
 
 on:
   push:
