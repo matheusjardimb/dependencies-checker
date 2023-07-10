@@ -1,11 +1,11 @@
 {
-  "name": "exact-dependency-checker",
-  "version": "0.8.7",
-  "description": "JS exact dependency action",
+  "name": "dependencies-checker",
+  "version": "0.9.1",
+  "description": "JS dependencies checker",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/matheusjardimb/js-exact-dependency-action"
+    "url": "https://github.com/matheusjardimb/dependencies-checker"
   },
   "keywords": [
     "GitHub",
@@ -19,9 +19,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/matheusjardimb/js-exact-dependency-action/issues"
+    "url": "https://github.com/matheusjardimb/dependencies-checker/issues"
   },
-  "homepage": "https://github.com/matheusjardimb/js-exact-dependency-action#readme",
+  "homepage": "https://github.com/matheusjardimb/dependencies-checker#readme",
   "main": "lib/index.js",
   "scripts": {
     "prepare": "ncc build src/index.ts -o dist --minify",

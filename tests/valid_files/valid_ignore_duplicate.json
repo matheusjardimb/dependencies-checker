@@ -1,6 +1,6 @@
 {
-  "exactDependencyChecker": {
-    "blocksToCheck": [
+  "dependencies-checker": {
+    "blocks-to-check": [
       "dependencies"
     ]
   },
