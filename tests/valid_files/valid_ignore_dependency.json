@@ -1,6 +1,6 @@
 {
-  "exactDependencyChecker": {
-    "ignoredDependencies": [
+  "dependencies-checker": {
+    "ignored-dependencies": [
       "semistandard"
     ]
   },
