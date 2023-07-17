@@ -7,7 +7,14 @@ import {
 import * as fs from 'fs'
 import * as core from '@actions/core'
 import findDuplicatedPropertyKeys from 'find-duplicated-property-keys'
-import {blocksToCheckKey, ignoredDependenciesKey, libSettingsKey} from './consts'
+import {
+    blocksToCheckKey,
+    ignoredDependenciesKey,
+    ignoredDependenciesDefault,
+    libSettingsKey,
+    invalidVersionDescriptorsKey,
+    invalidVersionDescriptorsDefault
+} from './constants'
 
 function isValidDependency(dep: string): boolean {
     // TODO: this method can be drastically improved, leaving this way just for testing
@@ -40,7 +47,8 @@ function checkDependencyList(
     packageJson: {[p: string]: unknown},
     ignoredDepList: string[],
     dependencyBlockKey: string,
-    allDependencies: string[]
+    allDependencies: string[],
+    invalidDescriptors: string[]
 ): void {
     core.info(`Checking block '${dependencyBlockKey}'`)
 
@@ -70,7 +78,7 @@ function checkDependencyList(
 function isDependencyBlock(keyName: string): boolean {
     const keyNameLower = keyName.toLowerCase()
     return (
-        (keyNameLower !== libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
+        (keyNameLower !== libSettingsKey && keyNameLower.includes('dependency')) ||
         keyNameLower.includes('dependencies')
     )
 }
@@ -103,7 +111,20 @@ function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[]
         }
     }
     core.info(`Checking all dependencies`)
-    return []
+    return ignoredDependenciesDefault
+}
+
+function getInvalidDescriptors(packageJson: {[p: string]: undefined}): string[] {
+    const libSettingsValue = packageJson[libSettingsKey]
+    let res = invalidVersionDescriptorsDefault
+    if (libSettingsValue !== undefined) {
+        const invalidDescriptors = libSettingsValue[invalidVersionDescriptorsKey] as string[]
+        if (invalidDescriptors !== undefined) {
+            res = invalidDescriptors
+        }
+    }
+    core.info(`Invalid descriptors ${res}`)
+    return res
 }
 
 function read_package_json_file(packageJsonPath: string): [string, {[p: string]: undefined}] {
@@ -125,6 +146,7 @@ function checkDependencies(packageJsonPath: string): void {
     }
     const dependencyBlocksToCheck: string[] = getBlocksToCheck(packageJson)
     const ignoredDepList: string[] = getIgnoredDependencies(packageJson)
+    const invalidDescriptors: string[] = getInvalidDescriptors(packageJson)
 
     const result = findDuplicatedPropertyKeys(rawData)
     if (result.length > 0) {
@@ -133,7 +155,7 @@ function checkDependencies(packageJsonPath: string): void {
 
     const allDependencies: string[] = []
     for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies)
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors)
     }
 }
 
