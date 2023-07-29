@@ -11,11 +11,18 @@ const packageJsonPathKey = 'packageJsonPath' // OK
 
 const packageJsonPathDefault = 'package.json' // OK
 
+const libSettingsDefault = {
+    // blocksToCheckKey:[]
+    ignoredDependenciesKey: [],
+    invalidVersionDescriptorsKey: invalidVersionDescriptorsDefault
+}
+
 export {
     libSettingsKey,
     blocksToCheckKey,
     ignoredDependenciesKey,
     packageJsonPathKey,
     packageJsonPathDefault,
-    ignoredDependenciesDefault
+    ignoredDependenciesDefault,
+    libSettingsDefault
 }
