@@ -12,9 +12,9 @@ import {
     ignoredDependenciesKey,
     ignoredDependenciesDefault,
     libSettingsKey,
-    libSettingsDefault,
-    invalidVersionDescriptorsKey,
-    invalidVersionDescriptorsDefault
+    validVersionDescriptorsKey,
+    invalidVersionDescriptorsDefault,
+    libSettingsDefault
 } from './constants'
 
 type packageJsonType = {[p: string]: unknown}
@@ -110,12 +110,12 @@ function getIgnoredDependencies(packageJson: packageJsonType, libSettings: libSe
 function getInvalidDescriptors(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
     let res = invalidVersionDescriptorsDefault
 
-    const invalidDescriptors = libSettings[invalidVersionDescriptorsKey] as string[]
+    const invalidDescriptors = libSettings[validVersionDescriptorsKey] as string[]
     if (invalidDescriptors !== undefined) {
-        res = invalidDescriptors
+        res = res.filter(x => !invalidDescriptors.includes(x))
     }
 
-    core.info(`Invalid descriptors: '${res}'`)
+    core.info(`Invalid descriptors: '${res.join(', ')}'`)
     return res
 }
 
