@@ -38,19 +38,8 @@ const errors_1 = __nccwpck_require__(292);
 const fs = __importStar(__nccwpck_require__(147));
 const core = __importStar(__nccwpck_require__(186));
 const find_duplicated_property_keys_1 = __importDefault(__nccwpck_require__(392));
-const consts_1 = __nccwpck_require__(831);
-function isValidDependency(dep) {
-    // TODO: this method can be drastically improved, leaving this way just for testing
-    return !(dep === '' ||
-        dep.includes('latest') ||
-        dep.includes('^') ||
-        dep.includes('~') ||
-        dep.includes('x') ||
-        dep.includes('*') ||
-        dep.includes('>') ||
-        dep.includes('<') ||
-        dep.includes('|') ||
-        dep.includes('-'));
+const constants_1 = __nccwpck_require__(105);
+function isValidDependency(dependencyVersion, invalidDescriptors) {
     // TODO: consider evaluating url dependencies
     // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
     // http://... See 'URLs as Dependencies' below
@@ -58,11 +47,17 @@ function isValidDependency(dep) {
     // user/repo See 'GitHub URLs' below
     // tag A specific version tagged and published as tag See npm dist-tag
     // path/path/path See Local Paths bel
+    for (const descriptor of invalidDescriptors) {
+        if (dependencyVersion.includes(descriptor)) {
+            return false;
+        }
+    }
+    return dependencyVersion !== '';
 }
 function isIgnoredDependency(dependency, ignoredDepList) {
     return ignoredDepList.includes(dependency);
 }
-function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, allDependencies) {
+function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, allDependencies, invalidDescriptors) {
     core.info(`Checking block '${dependencyBlockKey}'`);
     if (packageJson[dependencyBlockKey] === undefined) {
         throw new errors_1.DependencyBlockNotFoundError(dependencyBlockKey);
@@ -70,7 +65,7 @@ function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, al
     const dependencyBlock = packageJson[dependencyBlockKey];
     for (const [dependency, version] of Object.entries(dependencyBlock)) {
         const dep_label = `{ ${dependency}: ${version} }`;
-        if (isValidDependency(version)) {
+        if (isValidDependency(version, invalidDescriptors)) {
             if (allDependencies.includes(dependency)) {
                 throw new errors_1.DuplicateDependencyError(dependency);
             }
@@ -89,16 +84,13 @@ function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, al
 }
 function isDependencyBlock(keyName) {
     const keyNameLower = keyName.toLowerCase();
-    return ((keyNameLower !== consts_1.libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
-        keyNameLower.includes('dependencies'));
+    return (keyNameLower !== constants_1.libSettingsKey &&
+        (keyNameLower.includes('dependency') || keyNameLower.includes('dependencies')));
 }
-function getBlocksToCheck(packageJson) {
-    const libSettingsValue = packageJson[consts_1.libSettingsKey];
-    if (libSettingsValue !== undefined) {
-        const blocksToCheckValue = libSettingsValue[consts_1.blocksToCheckKey];
-        if (blocksToCheckValue !== undefined) {
-            return blocksToCheckValue;
-        }
+function getBlocksToCheck(packageJson, libSettings) {
+    const blocksToCheckValue = libSettings[constants_1.blocksToCheckKey];
+    if (blocksToCheckValue !== undefined) {
+        return blocksToCheckValue;
     }
     const dependencyBlocksToCheck = [];
     for (const [entryName] of Object.entries(packageJson)) {
@@ -108,44 +100,65 @@ function getBlocksToCheck(packageJson) {
     }
     return dependencyBlocksToCheck;
 }
-function getIgnoredDependencies(packageJson) {
-    const libSettingsValue = packageJson[consts_1.libSettingsKey];
-    if (libSettingsValue !== undefined) {
-        const ignoredDependencies = libSettingsValue[consts_1.ignoredDependenciesKey];
-        if (ignoredDependencies !== undefined) {
-            core.info(`Ignoring dependencies ${ignoredDependencies}`);
-            return ignoredDependencies;
-        }
+function getIgnoredDependencies(packageJson, libSettings) {
+    const ignoredDependencies = libSettings[constants_1.ignoredDependenciesKey];
+    if (ignoredDependencies !== undefined) {
+        core.info(`Ignoring dependencies ${ignoredDependencies}`);
+        return ignoredDependencies;
     }
     core.info(`Checking all dependencies`);
-    return [];
+    return constants_1.ignoredDependenciesDefault;
 }
-function read_package_json_file(packageJsonPath) {
-    const rawData = fs.readFileSync(packageJsonPath, 'utf8');
-    return [rawData, JSON.parse(rawData)];
+function getInvalidDescriptors(packageJson, libSettings) {
+    let res = constants_1.invalidVersionDescriptorsDefault;
+    const invalidDescriptors = libSettings[constants_1.invalidVersionDescriptorsKey];
+    if (invalidDescriptors !== undefined) {
+        res = invalidDescriptors;
+    }
+    core.info(`Invalid descriptors: '${res}'`);
+    return res;
 }
-function checkDependencies(packageJsonPath) {
-    let packageJson;
-    let rawData;
+function readPackageJsonFileAsRaw(packageJsonPath) {
     try {
-        ;
-        [rawData, packageJson] = read_package_json_file(packageJsonPath);
+        return fs.readFileSync(packageJsonPath, 'utf8');
     }
     catch (e) {
         throw new errors_1.InvalidPackageFileError(packageJsonPath);
     }
-    if (packageJson[consts_1.libSettingsKey] === undefined) {
-        core.info(`Custom '${consts_1.libSettingsKey}' block not informed, using default values`);
-    }
-    const dependencyBlocksToCheck = getBlocksToCheck(packageJson);
-    const ignoredDepList = getIgnoredDependencies(packageJson);
-    const result = (0, find_duplicated_property_keys_1.default)(rawData);
+}
+function checkDuplicateSettingsBlock(rawJsonData) {
+    const result = (0, find_duplicated_property_keys_1.default)(rawJsonData);
     if (result.length > 0) {
         throw new errors_1.DuplicateDependencyError(result[0]['key']);
     }
+}
+function parsePackageJson(rawPackageJson, packageJsonPath) {
+    try {
+        return JSON.parse(rawPackageJson);
+    }
+    catch (e) {
+        throw new errors_1.InvalidPackageFileError(packageJsonPath);
+    }
+}
+function getLibSettings(packageJson) {
+    let libSettings = packageJson[constants_1.libSettingsKey];
+    if (libSettings === undefined) {
+        libSettings = constants_1.libSettingsDefault;
+        core.info(`Custom '${constants_1.libSettingsKey}' block not informed, using default values`);
+    }
+    return libSettings;
+}
+function checkDependencies(packageJsonPath) {
+    const rawPackageJson = readPackageJsonFileAsRaw(packageJsonPath);
+    const packageJson = parsePackageJson(rawPackageJson, packageJsonPath);
+    checkDuplicateSettingsBlock(rawPackageJson);
+    const libSettings = getLibSettings(packageJson);
+    const dependencyBlocksToCheck = getBlocksToCheck(packageJson, libSettings);
+    const ignoredDepList = getIgnoredDependencies(packageJson, libSettings);
+    const invalidDescriptors = getInvalidDescriptors(packageJson, libSettings);
     const allDependencies = [];
     for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies);
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors);
     }
 }
 exports["default"] = checkDependencies;
@@ -153,31 +166,33 @@ exports["default"] = checkDependencies;
 
 /***/ }),
 
-/***/ 831:
+/***/ 105:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ignoredDepList_default = exports.ignoredDepList = exports.dependencyBlocksToCheck_default = exports.dependencyBlocksToCheck = exports.packageJsonPath_default = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.libSettingsKey = void 0;
-const libSettingsKey = 'dependencies-checker';
+exports.libSettingsDefault = exports.ignoredDependenciesDefault = exports.packageJsonPathDefault = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.libSettingsKey = exports.invalidVersionDescriptorsDefault = exports.invalidVersionDescriptorsKey = void 0;
+const libSettingsKey = 'dependencies-checker'; // OK
 exports.libSettingsKey = libSettingsKey;
-const blocksToCheckKey = 'blocks-to-check';
+const blocksToCheckKey = 'blocks-to-check'; // OK
 exports.blocksToCheckKey = blocksToCheckKey;
-const ignoredDependenciesKey = 'ignored-dependencies';
+const ignoredDependenciesKey = 'ignored-dependencies'; // OK
 exports.ignoredDependenciesKey = ignoredDependenciesKey;
-const packageJsonPathKey = 'packageJsonPath';
+const ignoredDependenciesDefault = [''];
+exports.ignoredDependenciesDefault = ignoredDependenciesDefault;
+exports.invalidVersionDescriptorsKey = 'invalid-descriptors';
+exports.invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-'];
+const packageJsonPathKey = 'packageJsonPath'; // OK
 exports.packageJsonPathKey = packageJsonPathKey;
-const packageJsonPath_default = 'package.json';
-exports.packageJsonPath_default = packageJsonPath_default;
-const dependencyBlocksToCheck = 'dependencyBlocksToCheck';
-exports.dependencyBlocksToCheck = dependencyBlocksToCheck;
-const dependencyBlocksToCheck_default = ['dependencies', 'devDependencies'];
-exports.dependencyBlocksToCheck_default = dependencyBlocksToCheck_default;
-const ignoredDepList = 'ignoredDepList';
-exports.ignoredDepList = ignoredDepList;
-const ignoredDepList_default = [''];
-exports.ignoredDepList_default = ignoredDepList_default;
+const packageJsonPathDefault = 'package.json'; // OK
+exports.packageJsonPathDefault = packageJsonPathDefault;
+const libSettingsDefault = {
+    // blocksToCheckKey:[]
+    ignoredDependenciesKey: [],
+    invalidVersionDescriptorsKey: exports.invalidVersionDescriptorsDefault
+};
+exports.libSettingsDefault = libSettingsDefault;
 
 
 /***/ }),
@@ -260,16 +275,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const check_dependencies_1 = __importDefault(__nccwpck_require__(286));
-const consts_1 = __nccwpck_require__(831);
-function validateDependencies() {
-    let packageJsonPath = core.getInput(consts_1.packageJsonPathKey);
+const constants_1 = __nccwpck_require__(105);
+function getPackageJsonPath() {
+    let packageJsonPath = core.getInput(constants_1.packageJsonPathKey);
     if (packageJsonPath) {
-        core.info(`Reading ${packageJsonPath}`);
+        packageJsonPath = constants_1.packageJsonPathDefault;
+        core.info(`Parameter packageJsonPath not informed.`);
     }
-    else {
-        packageJsonPath = consts_1.packageJsonPath_default;
-        core.info(`Parameter packageJsonPath not informed, reading ${packageJsonPath} by default`);
-    }
+    core.info(`Reading '${packageJsonPath}' file`);
+    return packageJsonPath;
+}
+function validateDependencies() {
+    const packageJsonPath = getPackageJsonPath();
     (0, check_dependencies_1.default)(packageJsonPath);
 }
 function run() {
