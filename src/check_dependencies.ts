@@ -16,6 +16,8 @@ import {
     invalidVersionDescriptorsDefault
 } from './constants'
 
+type packageJsonType = {[p: string]: unknown}
+
 function isValidDependency(dep: string): boolean {
     // TODO: this method can be drastically improved, leaving this way just for testing
     return !(
@@ -44,7 +46,7 @@ function isIgnoredDependency(dependency: string, ignoredDepList: string[]): bool
 }
 
 function checkDependencyList(
-    packageJson: {[p: string]: unknown},
+    packageJson: packageJsonType,
     ignoredDepList: string[],
     dependencyBlockKey: string,
     allDependencies: string[],
@@ -83,7 +85,7 @@ function isDependencyBlock(keyName: string): boolean {
     )
 }
 
-function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
+function getBlocksToCheck(packageJson: packageJsonType): string[] {
     const libSettingsValue = packageJson[libSettingsKey]
     if (libSettingsValue !== undefined) {
         const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
@@ -101,7 +103,7 @@ function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
     return dependencyBlocksToCheck
 }
 
-function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[] {
+function getIgnoredDependencies(packageJson: packageJsonType): string[] {
     const libSettingsValue = packageJson[libSettingsKey]
     if (libSettingsValue !== undefined) {
         const ignoredDependencies = libSettingsValue[ignoredDependenciesKey] as string[]
@@ -114,7 +116,7 @@ function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[]
     return ignoredDependenciesDefault
 }
 
-function getInvalidDescriptors(packageJson: {[p: string]: undefined}): string[] {
+function getInvalidDescriptors(packageJson: packageJsonType): string[] {
     const libSettingsValue = packageJson[libSettingsKey]
     let res = invalidVersionDescriptorsDefault
     if (libSettingsValue !== undefined) {
@@ -127,7 +129,7 @@ function getInvalidDescriptors(packageJson: {[p: string]: undefined}): string[] 
     return res
 }
 
-function read_package_json_file(packageJsonPath: string): [string, {[p: string]: undefined}] {
+function read_package_json_file(packageJsonPath: string): [string, packageJsonType] {
     const rawData = fs.readFileSync(packageJsonPath, 'utf8')
     return [rawData, JSON.parse(rawData)]
 }
