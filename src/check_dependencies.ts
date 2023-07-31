@@ -7,22 +7,20 @@ import {
 import * as fs from 'fs'
 import * as core from '@actions/core'
 import findDuplicatedPropertyKeys from 'find-duplicated-property-keys'
-import {blocksToCheckKey, ignoredDependenciesKey, libSettingsKey} from './consts'
+import {
+    blocksToCheckKey,
+    ignoredDependenciesKey,
+    ignoredDependenciesDefault,
+    libSettingsKey,
+    validVersionDescriptorsKey,
+    invalidVersionDescriptorsDefault,
+    libSettingsDefault
+} from './constants'
 
-function isValidDependency(dep: string): boolean {
-    // TODO: this method can be drastically improved, leaving this way just for testing
-    return !(
-        dep === '' ||
-        dep.includes('latest') ||
-        dep.includes('^') ||
-        dep.includes('~') ||
-        dep.includes('x') ||
-        dep.includes('*') ||
-        dep.includes('>') ||
-        dep.includes('<') ||
-        dep.includes('|') ||
-        dep.includes('-')
-    )
+type packageJsonType = {[p: string]: unknown}
+type libSettingsType = {[p: string]: unknown}
+
+function isValidDependency(dependencyVersion: string, invalidDescriptors: string[]): boolean {
     // TODO: consider evaluating url dependencies
     // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
     // http://... See 'URLs as Dependencies' below
@@ -30,6 +28,13 @@ function isValidDependency(dep: string): boolean {
     // user/repo See 'GitHub URLs' below
     // tag A specific version tagged and published as tag See npm dist-tag
     // path/path/path See Local Paths bel
+
+    for (const descriptor of invalidDescriptors) {
+        if (dependencyVersion.includes(descriptor)) {
+            return false
+        }
+    }
+    return dependencyVersion !== ''
 }
 
 function isIgnoredDependency(dependency: string, ignoredDepList: string[]): boolean {
@@ -37,10 +42,11 @@ function isIgnoredDependency(dependency: string, ignoredDepList: string[]): bool
 }
 
 function checkDependencyList(
-    packageJson: {[p: string]: unknown},
+    packageJson: packageJsonType,
     ignoredDepList: string[],
     dependencyBlockKey: string,
-    allDependencies: string[]
+    allDependencies: string[],
+    invalidDescriptors: string[]
 ): void {
     core.info(`Checking block '${dependencyBlockKey}'`)
 
@@ -51,7 +57,7 @@ function checkDependencyList(
     const dependencyBlock: {[index: string]: string} = packageJson[dependencyBlockKey] as {}
     for (const [dependency, version] of Object.entries(dependencyBlock)) {
         const dep_label = `{ ${dependency}: ${version} }`
-        if (isValidDependency(version)) {
+        if (isValidDependency(version, invalidDescriptors)) {
             if (allDependencies.includes(dependency)) {
                 throw new DuplicateDependencyError(dependency)
             }
@@ -70,18 +76,15 @@ function checkDependencyList(
 function isDependencyBlock(keyName: string): boolean {
     const keyNameLower = keyName.toLowerCase()
     return (
-        (keyNameLower !== libSettingsKey.toLowerCase() && keyNameLower.includes('dependency')) ||
-        keyNameLower.includes('dependencies')
+        keyNameLower !== libSettingsKey &&
+        (keyNameLower.includes('dependency') || keyNameLower.includes('dependencies'))
     )
 }
 
-function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
-    const libSettingsValue = packageJson[libSettingsKey]
-    if (libSettingsValue !== undefined) {
-        const blocksToCheckValue = libSettingsValue[blocksToCheckKey]
-        if (blocksToCheckValue !== undefined) {
-            return blocksToCheckValue as string[]
-        }
+function getBlocksToCheck(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
+    const blocksToCheckValue = libSettings[blocksToCheckKey]
+    if (blocksToCheckValue !== undefined) {
+        return blocksToCheckValue as string[]
     }
 
     const dependencyBlocksToCheck: string[] = []
@@ -93,47 +96,75 @@ function getBlocksToCheck(packageJson: {[p: string]: undefined}): string[] {
     return dependencyBlocksToCheck
 }
 
-function getIgnoredDependencies(packageJson: {[p: string]: undefined}): string[] {
-    const libSettingsValue = packageJson[libSettingsKey]
-    if (libSettingsValue !== undefined) {
-        const ignoredDependencies = libSettingsValue[ignoredDependenciesKey] as string[]
-        if (ignoredDependencies !== undefined) {
-            core.info(`Ignoring dependencies ${ignoredDependencies}`)
-            return ignoredDependencies
-        }
+function getIgnoredDependencies(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
+    const ignoredDependencies = libSettings[ignoredDependenciesKey] as string[]
+    if (ignoredDependencies !== undefined) {
+        core.info(`Ignoring dependencies ${ignoredDependencies}`)
+        return ignoredDependencies
     }
+
     core.info(`Checking all dependencies`)
-    return []
+    return ignoredDependenciesDefault
 }
 
-function read_package_json_file(packageJsonPath: string): [string, {[p: string]: undefined}] {
-    const rawData = fs.readFileSync(packageJsonPath, 'utf8')
-    return [rawData, JSON.parse(rawData)]
+function getInvalidDescriptors(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
+    let res = invalidVersionDescriptorsDefault
+
+    const invalidDescriptors = libSettings[validVersionDescriptorsKey] as string[]
+    if (invalidDescriptors !== undefined) {
+        res = res.filter(x => !invalidDescriptors.includes(x))
+    }
+
+    core.info(`Invalid descriptors: '${res.join(', ')}'`)
+    return res
 }
 
-function checkDependencies(packageJsonPath: string): void {
-    let packageJson
-    let rawData
+function readPackageJsonFileAsRaw(packageJsonPath: string): string {
     try {
-        ;[rawData, packageJson] = read_package_json_file(packageJsonPath)
+        return fs.readFileSync(packageJsonPath, 'utf8')
     } catch (e) {
         throw new InvalidPackageFileError(packageJsonPath)
     }
+}
 
-    if (packageJson[libSettingsKey] === undefined) {
-        core.info(`Custom '${libSettingsKey}' block not informed, using default values`)
-    }
-    const dependencyBlocksToCheck: string[] = getBlocksToCheck(packageJson)
-    const ignoredDepList: string[] = getIgnoredDependencies(packageJson)
-
-    const result = findDuplicatedPropertyKeys(rawData)
+function checkDuplicateSettingsBlock(rawJsonData: string): void {
+    const result = findDuplicatedPropertyKeys(rawJsonData)
     if (result.length > 0) {
         throw new DuplicateDependencyError(result[0]['key'])
     }
+}
+
+function parsePackageJson(rawPackageJson: string, packageJsonPath: string): packageJsonType {
+    try {
+        return JSON.parse(rawPackageJson)
+    } catch (e) {
+        throw new InvalidPackageFileError(packageJsonPath)
+    }
+}
+
+function getLibSettings(packageJson: packageJsonType): libSettingsType {
+    let libSettings = packageJson[libSettingsKey] as {}
+    if (libSettings === undefined) {
+        libSettings = libSettingsDefault
+        core.info(`Custom '${libSettingsKey}' block not informed, using default values`)
+    }
+    return libSettings
+}
+
+function checkDependencies(packageJsonPath: string): void {
+    const rawPackageJson = readPackageJsonFileAsRaw(packageJsonPath)
+    const packageJson = parsePackageJson(rawPackageJson, packageJsonPath)
+    checkDuplicateSettingsBlock(rawPackageJson)
+
+    const libSettings = getLibSettings(packageJson)
+
+    const dependencyBlocksToCheck: string[] = getBlocksToCheck(packageJson, libSettings)
+    const ignoredDepList: string[] = getIgnoredDependencies(packageJson, libSettings)
+    const invalidDescriptors: string[] = getInvalidDescriptors(packageJson, libSettings)
 
     const allDependencies: string[] = []
     for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies)
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors)
     }
 }
 

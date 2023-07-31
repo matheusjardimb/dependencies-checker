@@ -1,0 +1,16 @@
+{
+  "dependencies-checker": {
+    "valid-descriptors": [
+      "<"
+    ]
+  },
+  "dependencies": {
+    "@actions/core": "1.9.1",
+    "@vercel/ncc": "0.36.1",
+    "jest": "26.6.3",
+    "nock": "13.0.9"
+  },
+  "devDependencies": {
+    "semistandard": "<=0.36.1"
+  }
+}
