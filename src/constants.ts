@@ -1,15 +1,15 @@
-const libSettingsKey = 'dependencies-checker' // OK
-const blocksToCheckKey = 'blocks-to-check' // OK
+const libSettingsKey = 'dependencies-checker'
+const blocksToCheckKey = 'blocks-to-check'
 
-const ignoredDependenciesKey = 'ignored-dependencies' // OK
+const ignoredDependenciesKey = 'ignored-dependencies'
 const ignoredDependenciesDefault = ['']
 
 const validVersionDescriptorsKey = 'valid-descriptors'
 
 const invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-']
-const packageJsonPathKey = 'packageJsonPath' // OK
+const packageJsonPathKey = 'packageJsonPath'
 
-const packageJsonPathDefault = 'package.json' // OK
+const packageJsonPathDefault = 'package.json'
 
 const libSettingsDefault = {
     // blocksToCheckKey:[]

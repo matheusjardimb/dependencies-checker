@@ -6,7 +6,7 @@ import {packageJsonPathDefault, packageJsonPathKey} from './constants'
 
 function getPackageJsonPath(): string {
     let packageJsonPath = core.getInput(packageJsonPathKey)
-    if (packageJsonPath) {
+    if (!packageJsonPath) {
         packageJsonPath = packageJsonPathDefault
         core.info(`Parameter packageJsonPath not informed.`)
     }
