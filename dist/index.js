@@ -111,11 +111,11 @@ function getIgnoredDependencies(packageJson, libSettings) {
 }
 function getInvalidDescriptors(packageJson, libSettings) {
     let res = constants_1.invalidVersionDescriptorsDefault;
-    const invalidDescriptors = libSettings[constants_1.invalidVersionDescriptorsKey];
+    const invalidDescriptors = libSettings[constants_1.validVersionDescriptorsKey];
     if (invalidDescriptors !== undefined) {
-        res = invalidDescriptors;
+        res = res.filter(x => !invalidDescriptors.includes(x));
     }
-    core.info(`Invalid descriptors: '${res}'`);
+    core.info(`Invalid descriptors: '${res.join(', ')}'`);
     return res;
 }
 function readPackageJsonFileAsRaw(packageJsonPath) {
@@ -172,7 +172,7 @@ exports["default"] = checkDependencies;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.libSettingsDefault = exports.ignoredDependenciesDefault = exports.packageJsonPathDefault = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.libSettingsKey = exports.invalidVersionDescriptorsDefault = exports.invalidVersionDescriptorsKey = void 0;
+exports.ignoredDependenciesDefault = exports.packageJsonPathDefault = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.validVersionDescriptorsKey = exports.invalidVersionDescriptorsDefault = exports.libSettingsDefault = exports.libSettingsKey = void 0;
 const libSettingsKey = 'dependencies-checker'; // OK
 exports.libSettingsKey = libSettingsKey;
 const blocksToCheckKey = 'blocks-to-check'; // OK
@@ -181,16 +181,17 @@ const ignoredDependenciesKey = 'ignored-dependencies'; // OK
 exports.ignoredDependenciesKey = ignoredDependenciesKey;
 const ignoredDependenciesDefault = [''];
 exports.ignoredDependenciesDefault = ignoredDependenciesDefault;
-exports.invalidVersionDescriptorsKey = 'invalid-descriptors';
-exports.invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-'];
+const validVersionDescriptorsKey = 'valid-descriptors';
+exports.validVersionDescriptorsKey = validVersionDescriptorsKey;
+const invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-'];
+exports.invalidVersionDescriptorsDefault = invalidVersionDescriptorsDefault;
 const packageJsonPathKey = 'packageJsonPath'; // OK
 exports.packageJsonPathKey = packageJsonPathKey;
 const packageJsonPathDefault = 'package.json'; // OK
 exports.packageJsonPathDefault = packageJsonPathDefault;
 const libSettingsDefault = {
     // blocksToCheckKey:[]
-    ignoredDependenciesKey: [],
-    invalidVersionDescriptorsKey: exports.invalidVersionDescriptorsDefault
+    ignoredDependenciesKey: []
 };
 exports.libSettingsDefault = libSettingsDefault;
 
