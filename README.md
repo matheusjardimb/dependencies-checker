@@ -12,9 +12,9 @@ Easily control when your project accepts only exact versions of dependencies.
 This lib only takes the path to the `package.json` to be checked as a param, and it will look for the current directory
 when not provided.
 
-You may customize the lib's behaviour by adding a `dependencies-checker` block to your `package.json file`, as such:
+You may customize the lib's behaviour by adding a `dependencies-checker` block to your `package.json` file, as such:
 
-```json
+```json5
 {
   "dependencies": {
     "react": "^18.2.0",
