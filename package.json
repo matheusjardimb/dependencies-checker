@@ -41,7 +41,7 @@
   "devDependencies": {
     "@types/find-duplicated-property-keys": "1.1.1",
     "@types/mri": "1.1.1",
-    "@types/node": "18.16.3",
+    "@types/node": "20.4.6",
     "@typescript-eslint/parser": "5.62.0",
     "@vercel/ncc": "0.36.1",
     "eslint": "8.46.0",
