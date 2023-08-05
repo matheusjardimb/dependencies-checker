@@ -1,48 +1,29 @@
-# Dependencies Checker
+# :white_check_mark: Dependencies Checker
 
 <a href="https://github.com/matheusjardimb/dependencies-checker/actions"><img alt="javscript-action status" height="20" src="https://github.com/matheusjardimb/dependencies-checker/actions/workflows/test_coverage.yml/badge.svg"></a>
 ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/matheusjardimb/f17f5787f5b4ac05a4b5a5b73a32e446/raw/test.json)
 <a href="https://img.shields.io/github/v/release/matheusjardimb/dependencies-checker"><img alt="release" height="20" src="https://img.shields.io/github/v/release/matheusjardimb/dependencies-checker"></a>
 <a href="https://www.npmjs.com/package/dependencies-checker"><img src="https://badge.fury.io/js/dependencies-checker.svg" alt="npm version" height="20"></a>
 
-Easily control when your project accepts only exact versions of dependencies.
+Easily control the versions of dependencies your project accepts. Why?
+
+- :handshake: **Consistency**: Guarantees to use the exact same versions everywhere.
+- :bug: **Avoid bugs**: Make sure there are no duplicate entries in your dependencies.
+- :gear: **Automation**: Automatically rejects PRs when conditions are not met.
 
 ## Usage
 
-This lib only takes the path to the `package.json` to be checked as a param, and it will look for the current directory
+The lib only takes the path to the `package.json` as a param. It will default to the current directory
 when not provided.
-
-You may customize the lib's behaviour by adding a `dependencies-checker` block to your `package.json` file, as such:
-
-```json5
-{
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-native": "0.71.2"
-  },
-  "devDependencies": {
-    "prettier": "^2.8.8"
-  },
-  
-  "dependencies-checker": {
-    "blocks-to-check": [
-      "dependencies" // Only checks this block, ignoring `devDependencies`
-    ],
-    "ignored-dependencies": [
-      "react" // Ignores the '^' at react
-    ]
-  }
-}
-```
 
 ### GitHub actions
 
-To use it in your GitHub project, create a workflow file like `.github/workflows/dependencies-checker.yml` with:
+Create a file `.github/workflows/dependencies-checker.yml` with:
 
 ```yaml
 name: Check for dependencies without specific version
 
-on: [push]
+on: [ push ]
 
 jobs:
   dependency_check_job:
@@ -56,7 +37,6 @@ jobs:
 Add the following to specify a custom `package.json` path:
 
 ```yaml
-      // ...
       - uses: matheusjardimb/dependencies-checker@latest
         with:
           packageJsonPath: 'app/package.json'
@@ -64,7 +44,7 @@ Add the following to specify a custom `package.json` path:
 
 ### Gitlab
 
-You can use this lib into Gitlab's CI, by adding the following block to your `.gitlab-ci.yml` file:
+Add the following block to your `.gitlab-ci.yml` file:
 
 ```yaml
 validate_dependencies:
@@ -76,11 +56,46 @@ validate_dependencies:
 
 ### NPX
 
-The lib is also [published into npm](https://www.npmjs.com/package/dependencies-checker), so you can use it in the shell like:
+Dependencies checker is also [published into npm](https://www.npmjs.com/package/dependencies-checker), so you can run
+with:
 
 ```shell
-export INPUT_PACKAGEJSONPATH='package.json' # Optional
+export INPUT_PACKAGEJSONPATH='package.json' # This line is optional
 npx dependencies-checker@latest
+```
+
+# Custom rules
+
+Add a `dependencies-checker` block to your `package.json` file, if you need customize the default rules:
+
+```json5
+{
+  "dependencies": {
+    "react": "^18.2.0",
+    "axios": "1.3.5 | 1.3.6",
+    "react-native": "0.71.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.8"
+  },
+  // ...
+  "dependencies-checker": {
+    "blocks-to-check": [
+      // Ignores "devDependencies"
+      "dependencies"
+    ],
+    "ignored-dependencies": [
+      // Ignores the '^' at "react"
+      "react"
+    ],
+    // These version descriptors are not allowed by default:
+    //     'latest', '^', '~', 'x', '*', '>', '<', '|', '-'
+    "valid-descriptors": [
+      // Allows the '|' at "axios"
+      '|'
+    ]
+  }
+}
 ```
 
 ## License
