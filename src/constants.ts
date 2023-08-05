@@ -8,6 +8,7 @@ const validVersionDescriptorsKey = 'valid-descriptors'
 
 const invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-']
 const packageJsonPathKey = 'packageJsonPath'
+const packageJsonPathEnvKey = `INPUT_${packageJsonPathKey.toUpperCase()}`
 
 const packageJsonPathDefault = 'package.json'
 
@@ -24,6 +25,7 @@ export {
     blocksToCheckKey,
     ignoredDependenciesKey,
     packageJsonPathKey,
+    packageJsonPathEnvKey,
     packageJsonPathDefault,
     ignoredDependenciesDefault
 }
