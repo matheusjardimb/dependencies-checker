@@ -48,7 +48,7 @@ Add the following block to your `.gitlab-ci.yml` file:
 
 ```yaml
 validate_dependencies:
-  image: node:16.20.0
+  image: node:20.5.0
   script:
     - export INPUT_PACKAGEJSONPATH='package.json' # This line is optional
     - npx dependencies-checker@latest
