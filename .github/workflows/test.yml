@@ -8,15 +8,22 @@ name: 'Jest'
 on:
   pull_request:
 
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest ]
+        node: [ 12, 14, 16 ]
+
+    runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v3.5.3
 
       - uses: actions/setup-node@v3.7.0
         with:
-          node-version: 16
+          node-version: ${{ matrix.node }}
 
       - run: npm ci
       - run: npx jest --coverageReporters="json" --collectCoverage=true
