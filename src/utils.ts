@@ -7,4 +7,9 @@ function get_test_file_names(directory: string): string[] {
         .filter(item => item.name.endsWith('.json'))
         .map(item => `${directory}/${item.name}`)
 }
-export default get_test_file_names
+
+const setInput = (name: string, value: string): void => {
+    process.env[`INPUT_${name.replace(/ /g, '_').toUpperCase()}`] = value
+}
+
+export {get_test_file_names, setInput}

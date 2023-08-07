@@ -7,15 +7,7 @@ import {
 import * as fs from 'fs'
 import * as core from '@actions/core'
 import findDuplicatedPropertyKeys from 'find-duplicated-property-keys'
-import {
-    blocksToCheckKey,
-    ignoredDependenciesKey,
-    ignoredDependenciesDefault,
-    libSettingsKey,
-    validVersionDescriptorsKey,
-    invalidVersionDescriptorsDefault,
-    libSettingsDefault
-} from './constants'
+import * as constants from './constants'
 
 type packageJsonType = {[p: string]: unknown}
 type libSettingsType = {[p: string]: unknown}
@@ -76,13 +68,13 @@ function checkDependencyList(
 function isDependencyBlock(keyName: string): boolean {
     const keyNameLower = keyName.toLowerCase()
     return (
-        keyNameLower !== libSettingsKey &&
+        keyNameLower !== constants.libSettingsKey &&
         (keyNameLower.includes('dependency') || keyNameLower.includes('dependencies'))
     )
 }
 
 function getBlocksToCheck(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
-    const blocksToCheckValue = libSettings[blocksToCheckKey]
+    const blocksToCheckValue = libSettings[constants.blocksToCheckKey]
     if (blocksToCheckValue !== undefined) {
         return blocksToCheckValue as string[]
     }
@@ -97,22 +89,22 @@ function getBlocksToCheck(packageJson: packageJsonType, libSettings: libSettings
 }
 
 function getIgnoredDependencies(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
-    const ignoredDependencies = libSettings[ignoredDependenciesKey] as string[]
+    const ignoredDependencies = libSettings[constants.ignoredDependenciesKey] as string[]
     if (ignoredDependencies !== undefined) {
         core.info(`Ignoring dependencies ${ignoredDependencies}`)
         return ignoredDependencies
     }
 
     core.info(`Checking all dependencies`)
-    return ignoredDependenciesDefault
+    return constants.ignoredDependenciesDefault
 }
 
 function getInvalidDescriptors(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
-    let res = invalidVersionDescriptorsDefault
+    let res = constants.invalidVersionDescriptorsDefault
 
-    const invalidDescriptors = libSettings[validVersionDescriptorsKey] as string[]
+    const invalidDescriptors = libSettings[constants.validVersionDescriptorsKey] as string[]
     if (invalidDescriptors !== undefined) {
-        res = res.filter(x => !invalidDescriptors.includes(x))
+        res = res.filter((x: string) => !invalidDescriptors.includes(x))
     }
 
     core.info(`Invalid descriptors: '${res.join(', ')}'`)
@@ -143,10 +135,10 @@ function parsePackageJson(rawPackageJson: string, packageJsonPath: string): pack
 }
 
 function getLibSettings(packageJson: packageJsonType): libSettingsType {
-    let libSettings = packageJson[libSettingsKey] as {}
+    let libSettings = packageJson[constants.libSettingsKey] as {}
     if (libSettings === undefined) {
-        libSettings = libSettingsDefault
-        core.info(`Custom '${libSettingsKey}' block not informed, using default values`)
+        libSettings = constants.libSettingsDefault
+        core.info(`Custom '${constants.libSettingsKey}' block not informed, using default values`)
     }
     return libSettings
 }

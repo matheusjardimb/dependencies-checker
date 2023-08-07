@@ -38,7 +38,7 @@ const errors_1 = __nccwpck_require__(292);
 const fs = __importStar(__nccwpck_require__(147));
 const core = __importStar(__nccwpck_require__(186));
 const find_duplicated_property_keys_1 = __importDefault(__nccwpck_require__(392));
-const constants_1 = __nccwpck_require__(105);
+const constants = __importStar(__nccwpck_require__(105));
 function isValidDependency(dependencyVersion, invalidDescriptors) {
     // TODO: consider evaluating url dependencies
     // https://docs.npmjs.com/cli/v7/configuring-npm/package-json#dependencies
@@ -84,11 +84,11 @@ function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, al
 }
 function isDependencyBlock(keyName) {
     const keyNameLower = keyName.toLowerCase();
-    return (keyNameLower !== constants_1.libSettingsKey &&
+    return (keyNameLower !== constants.libSettingsKey &&
         (keyNameLower.includes('dependency') || keyNameLower.includes('dependencies')));
 }
 function getBlocksToCheck(packageJson, libSettings) {
-    const blocksToCheckValue = libSettings[constants_1.blocksToCheckKey];
+    const blocksToCheckValue = libSettings[constants.blocksToCheckKey];
     if (blocksToCheckValue !== undefined) {
         return blocksToCheckValue;
     }
@@ -101,19 +101,19 @@ function getBlocksToCheck(packageJson, libSettings) {
     return dependencyBlocksToCheck;
 }
 function getIgnoredDependencies(packageJson, libSettings) {
-    const ignoredDependencies = libSettings[constants_1.ignoredDependenciesKey];
+    const ignoredDependencies = libSettings[constants.ignoredDependenciesKey];
     if (ignoredDependencies !== undefined) {
         core.info(`Ignoring dependencies ${ignoredDependencies}`);
         return ignoredDependencies;
     }
     core.info(`Checking all dependencies`);
-    return constants_1.ignoredDependenciesDefault;
+    return constants.ignoredDependenciesDefault;
 }
 function getInvalidDescriptors(packageJson, libSettings) {
-    let res = constants_1.invalidVersionDescriptorsDefault;
-    const invalidDescriptors = libSettings[constants_1.validVersionDescriptorsKey];
+    let res = constants.invalidVersionDescriptorsDefault;
+    const invalidDescriptors = libSettings[constants.validVersionDescriptorsKey];
     if (invalidDescriptors !== undefined) {
-        res = res.filter(x => !invalidDescriptors.includes(x));
+        res = res.filter((x) => !invalidDescriptors.includes(x));
     }
     core.info(`Invalid descriptors: '${res.join(', ')}'`);
     return res;
@@ -141,10 +141,10 @@ function parsePackageJson(rawPackageJson, packageJsonPath) {
     }
 }
 function getLibSettings(packageJson) {
-    let libSettings = packageJson[constants_1.libSettingsKey];
+    let libSettings = packageJson[constants.libSettingsKey];
     if (libSettings === undefined) {
-        libSettings = constants_1.libSettingsDefault;
-        core.info(`Custom '${constants_1.libSettingsKey}' block not informed, using default values`);
+        libSettings = constants.libSettingsDefault;
+        core.info(`Custom '${constants.libSettingsKey}' block not informed, using default values`);
     }
     return libSettings;
 }
@@ -172,12 +172,12 @@ exports["default"] = checkDependencies;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.ignoredDependenciesDefault = exports.packageJsonPathDefault = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.validVersionDescriptorsKey = exports.invalidVersionDescriptorsDefault = exports.libSettingsDefault = exports.libSettingsKey = void 0;
-const libSettingsKey = 'dependencies-checker'; // OK
+exports.ignoredDependenciesDefault = exports.packageJsonPathDefault = exports.packageJsonPathEnvKey = exports.packageJsonPathKey = exports.ignoredDependenciesKey = exports.blocksToCheckKey = exports.validVersionDescriptorsKey = exports.invalidVersionDescriptorsDefault = exports.libSettingsDefault = exports.libSettingsKey = void 0;
+const libSettingsKey = 'dependencies-checker';
 exports.libSettingsKey = libSettingsKey;
-const blocksToCheckKey = 'blocks-to-check'; // OK
+const blocksToCheckKey = 'blocks-to-check';
 exports.blocksToCheckKey = blocksToCheckKey;
-const ignoredDependenciesKey = 'ignored-dependencies'; // OK
+const ignoredDependenciesKey = 'ignored-dependencies';
 exports.ignoredDependenciesKey = ignoredDependenciesKey;
 const ignoredDependenciesDefault = [''];
 exports.ignoredDependenciesDefault = ignoredDependenciesDefault;
@@ -185,9 +185,11 @@ const validVersionDescriptorsKey = 'valid-descriptors';
 exports.validVersionDescriptorsKey = validVersionDescriptorsKey;
 const invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-'];
 exports.invalidVersionDescriptorsDefault = invalidVersionDescriptorsDefault;
-const packageJsonPathKey = 'packageJsonPath'; // OK
+const packageJsonPathKey = 'packageJsonPath';
 exports.packageJsonPathKey = packageJsonPathKey;
-const packageJsonPathDefault = 'package.json'; // OK
+const packageJsonPathEnvKey = `INPUT_${packageJsonPathKey.toUpperCase()}`;
+exports.packageJsonPathEnvKey = packageJsonPathEnvKey;
+const packageJsonPathDefault = 'package.json';
 exports.packageJsonPathDefault = packageJsonPathDefault;
 const libSettingsDefault = {
     // blocksToCheckKey:[]
@@ -275,11 +277,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
+const run_checker_1 = __importDefault(__nccwpck_require__(148));
+function runChecker() {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info('Started validating dependencies');
+        try {
+            (0, run_checker_1.default)();
+            core.info('Finished validating without errors!');
+        }
+        catch (error) {
+            core.error(error);
+            core.setFailed(error);
+        }
+    });
+}
+runChecker();
+
+
+/***/ }),
+
+/***/ 148:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const core = __importStar(__nccwpck_require__(186));
 const check_dependencies_1 = __importDefault(__nccwpck_require__(286));
 const constants_1 = __nccwpck_require__(105);
 function getPackageJsonPath() {
     let packageJsonPath = core.getInput(constants_1.packageJsonPathKey);
-    if (packageJsonPath) {
+    if (!packageJsonPath) {
         packageJsonPath = constants_1.packageJsonPathDefault;
         core.info(`Parameter packageJsonPath not informed.`);
     }
@@ -290,20 +344,7 @@ function validateDependencies() {
     const packageJsonPath = getPackageJsonPath();
     (0, check_dependencies_1.default)(packageJsonPath);
 }
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.info('Started validating dependencies');
-        try {
-            validateDependencies();
-            core.info('Finished validating without errors!');
-        }
-        catch (error) {
-            core.error(error);
-            core.setFailed(error);
-        }
-    });
-}
-run();
+exports["default"] = validateDependencies;
 
 
 /***/ }),
