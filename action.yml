@@ -13,5 +13,5 @@ inputs:
     default: 'package.json'
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
