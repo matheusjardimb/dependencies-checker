@@ -15,12 +15,12 @@ jobs:
     steps:
       # Release with semantic tag like v1.0.3
       - name: Checkout
-        uses: actions/checkout@v3.5.3
+        uses: actions/checkout@v3.6.0
         with:
           ref: ${{ github.event.release.tag_name }}
 
       - name: Setup Node
-        uses: actions/setup-node@v3.7.0
+        uses: actions/setup-node@v3.8.1
 
       - run: npm ci && npm run build
       # Compile dist/index.ts and bundle with action.yml
