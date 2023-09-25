@@ -22,7 +22,7 @@ jobs:
       #        run: exit 1
 
       - name: Checking out!
-        uses: actions/checkout@v4.0.0
+        uses: actions/checkout@v4.1.0
         with:
           ref: ${{ env.tag_name }}
       - name: Print github context payload
