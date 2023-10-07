@@ -40,6 +40,7 @@ Add the following to specify a custom `package.json` path:
       - uses: matheusjardimb/dependencies-checker@latest
         with:
           packageJsonPath: 'app/package.json'
+          quite: true
 ```
 
 ### Gitlab
@@ -51,6 +52,7 @@ validate_dependencies:
   image: node:20.5.0
   script:
     - export INPUT_PACKAGEJSONPATH='package.json' # This line is optional
+    - export INPUT_QUIET='true' # This line is optional
     - npx dependencies-checker@latest
 ```
 
@@ -61,6 +63,7 @@ with:
 
 ```shell
 export INPUT_PACKAGEJSONPATH='package.json' # This line is optional
+export INPUT_QUIET='true' # This line is optional
 npx dependencies-checker@latest
 ```
 

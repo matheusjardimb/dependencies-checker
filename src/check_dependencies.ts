@@ -8,6 +8,7 @@ import * as fs from 'fs'
 import * as core from '@actions/core'
 import findDuplicatedPropertyKeys from 'find-duplicated-property-keys'
 import * as constants from './constants'
+import {info} from './log'
 
 type packageJsonType = {[p: string]: unknown}
 type libSettingsType = {[p: string]: unknown}
@@ -88,18 +89,26 @@ function getBlocksToCheck(packageJson: packageJsonType, libSettings: libSettings
     return dependencyBlocksToCheck
 }
 
-function getIgnoredDependencies(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
+function getIgnoredDependencies(
+    packageJson: packageJsonType,
+    libSettings: libSettingsType,
+    quietMode: boolean
+): string[] {
     const ignoredDependencies = libSettings[constants.ignoredDependenciesKey] as string[]
     if (ignoredDependencies !== undefined) {
-        core.info(`Ignoring dependencies ${ignoredDependencies}`)
+        info(`Ignoring dependencies ${ignoredDependencies}`, quietMode)
         return ignoredDependencies
     }
 
-    core.info(`Checking all dependencies`)
+    info(`Checking all dependencies`, quietMode)
     return constants.ignoredDependenciesDefault
 }
 
-function getInvalidDescriptors(packageJson: packageJsonType, libSettings: libSettingsType): string[] {
+function getInvalidDescriptors(
+    packageJson: packageJsonType,
+    libSettings: libSettingsType,
+    quietMode: boolean
+): string[] {
     let res = constants.invalidVersionDescriptorsDefault
 
     const invalidDescriptors = libSettings[constants.validVersionDescriptorsKey] as string[]
@@ -107,7 +116,7 @@ function getInvalidDescriptors(packageJson: packageJsonType, libSettings: libSet
         res = res.filter((x: string) => !invalidDescriptors.includes(x))
     }
 
-    core.info(`Invalid descriptors: '${res.join(', ')}'`)
+    info(`Invalid descriptors: '${res.join(', ')}'`, quietMode)
     return res
 }
 
@@ -134,30 +143,32 @@ function parsePackageJson(rawPackageJson: string, packageJsonPath: string): pack
     }
 }
 
-function getLibSettings(packageJson: packageJsonType): libSettingsType {
+function getLibSettings(packageJson: packageJsonType, quietMode: boolean): libSettingsType {
     let libSettings = packageJson[constants.libSettingsKey] as {}
     if (libSettings === undefined) {
         libSettings = constants.libSettingsDefault
-        core.info(`Custom '${constants.libSettingsKey}' block not informed, using default values`)
+        info(`Custom '${constants.libSettingsKey}' block not informed, using default values`, quietMode)
     }
     return libSettings
 }
 
-function checkDependencies(packageJsonPath: string): void {
+function checkDependencies(packageJsonPath: string, quietMode: boolean): void {
+    info('Started validating dependencies', quietMode)
     const rawPackageJson = readPackageJsonFileAsRaw(packageJsonPath)
     const packageJson = parsePackageJson(rawPackageJson, packageJsonPath)
     checkDuplicateSettingsBlock(rawPackageJson)
 
-    const libSettings = getLibSettings(packageJson)
+    const libSettings = getLibSettings(packageJson, quietMode)
 
     const dependencyBlocksToCheck: string[] = getBlocksToCheck(packageJson, libSettings)
-    const ignoredDepList: string[] = getIgnoredDependencies(packageJson, libSettings)
-    const invalidDescriptors: string[] = getInvalidDescriptors(packageJson, libSettings)
+    const ignoredDepList: string[] = getIgnoredDependencies(packageJson, libSettings, quietMode)
+    const invalidDescriptors: string[] = getInvalidDescriptors(packageJson, libSettings, quietMode)
 
     const allDependencies: string[] = []
     for (const dependencyBlock of dependencyBlocksToCheck) {
         checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors)
     }
+    info('Finished validating without errors!', quietMode)
 }
 
 export default checkDependencies

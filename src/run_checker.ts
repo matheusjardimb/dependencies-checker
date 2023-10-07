@@ -2,7 +2,12 @@
 
 import * as core from '@actions/core'
 import checkDependencies from './check_dependencies'
-import {packageJsonPathDefault, packageJsonPathKey} from './constants'
+import {packageJsonPathDefault, packageJsonPathKey, quietModeKey} from './constants'
+
+function getQuietMode(): boolean {
+    const quietMode = core.getInput(quietModeKey)
+    return quietMode === 'true'
+}
 
 function getPackageJsonPath(): string {
     let packageJsonPath = core.getInput(packageJsonPathKey)
@@ -16,7 +21,8 @@ function getPackageJsonPath(): string {
 
 function validateDependencies(): void {
     const packageJsonPath = getPackageJsonPath()
-    checkDependencies(packageJsonPath)
+    const quietMode = getQuietMode()
+    checkDependencies(packageJsonPath, quietMode)
 }
 
 export default validateDependencies
