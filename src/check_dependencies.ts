@@ -5,7 +5,6 @@ import {
     InvalidPackageFileError
 } from './errors'
 import * as fs from 'fs'
-import * as core from '@actions/core'
 import findDuplicatedPropertyKeys from 'find-duplicated-property-keys'
 import * as constants from './constants'
 import {info} from './log'
@@ -39,9 +38,10 @@ function checkDependencyList(
     ignoredDepList: string[],
     dependencyBlockKey: string,
     allDependencies: string[],
-    invalidDescriptors: string[]
+    invalidDescriptors: string[],
+    quietMode: boolean
 ): void {
-    core.info(`Checking block '${dependencyBlockKey}'`)
+    info(`Checking block '${dependencyBlockKey}'`, quietMode)
 
     if (packageJson[dependencyBlockKey] === undefined) {
         throw new DependencyBlockNotFoundError(dependencyBlockKey)
@@ -55,10 +55,10 @@ function checkDependencyList(
                 throw new DuplicateDependencyError(dependency)
             }
             allDependencies.push(dependency)
-            core.info(`\tDependency checked: ${dep_label}`)
+            info(`\tDependency checked: ${dep_label}`, quietMode)
         } else {
             if (isIgnoredDependency(dependency, ignoredDepList)) {
-                core.info(`\tInvalid dependency IGNORED: ${dep_label}`)
+                info(`\tInvalid dependency IGNORED: ${dep_label}`, quietMode)
             } else {
                 throw new InvalidDependencyError(dep_label)
             }
@@ -166,7 +166,14 @@ function checkDependencies(packageJsonPath: string, quietMode: boolean): void {
 
     const allDependencies: string[] = []
     for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors)
+        checkDependencyList(
+            packageJson,
+            ignoredDepList,
+            dependencyBlock,
+            allDependencies,
+            invalidDescriptors,
+            quietMode
+        )
     }
     info('Finished validating without errors!', quietMode)
 }
