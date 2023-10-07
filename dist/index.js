@@ -36,7 +36,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const errors_1 = __nccwpck_require__(292);
 const fs = __importStar(__nccwpck_require__(147));
-const core = __importStar(__nccwpck_require__(186));
 const find_duplicated_property_keys_1 = __importDefault(__nccwpck_require__(392));
 const constants = __importStar(__nccwpck_require__(105));
 const log_1 = __nccwpck_require__(817);
@@ -58,8 +57,8 @@ function isValidDependency(dependencyVersion, invalidDescriptors) {
 function isIgnoredDependency(dependency, ignoredDepList) {
     return ignoredDepList.includes(dependency);
 }
-function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, allDependencies, invalidDescriptors) {
-    core.info(`Checking block '${dependencyBlockKey}'`);
+function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, allDependencies, invalidDescriptors, quietMode) {
+    (0, log_1.info)(`Checking block '${dependencyBlockKey}'`, quietMode);
     if (packageJson[dependencyBlockKey] === undefined) {
         throw new errors_1.DependencyBlockNotFoundError(dependencyBlockKey);
     }
@@ -71,11 +70,11 @@ function checkDependencyList(packageJson, ignoredDepList, dependencyBlockKey, al
                 throw new errors_1.DuplicateDependencyError(dependency);
             }
             allDependencies.push(dependency);
-            core.info(`\tDependency checked: ${dep_label}`);
+            (0, log_1.info)(`\tDependency checked: ${dep_label}`, quietMode);
         }
         else {
             if (isIgnoredDependency(dependency, ignoredDepList)) {
-                core.info(`\tInvalid dependency IGNORED: ${dep_label}`);
+                (0, log_1.info)(`\tInvalid dependency IGNORED: ${dep_label}`, quietMode);
             }
             else {
                 throw new errors_1.InvalidDependencyError(dep_label);
@@ -160,7 +159,7 @@ function checkDependencies(packageJsonPath, quietMode) {
     const invalidDescriptors = getInvalidDescriptors(packageJson, libSettings, quietMode);
     const allDependencies = [];
     for (const dependencyBlock of dependencyBlocksToCheck) {
-        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors);
+        checkDependencyList(packageJson, ignoredDepList, dependencyBlock, allDependencies, invalidDescriptors, quietMode);
     }
     (0, log_1.info)('Finished validating without errors!', quietMode);
 }
@@ -375,22 +374,23 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(186));
 const check_dependencies_1 = __importDefault(__nccwpck_require__(286));
 const constants_1 = __nccwpck_require__(105);
+const log_1 = __nccwpck_require__(817);
 function getQuietMode() {
     const quietMode = core.getInput(constants_1.quietModeKey);
     return quietMode === 'true';
 }
-function getPackageJsonPath() {
+function getPackageJsonPath(quietMode) {
     let packageJsonPath = core.getInput(constants_1.packageJsonPathKey);
     if (!packageJsonPath) {
         packageJsonPath = constants_1.packageJsonPathDefault;
-        core.info(`Parameter packageJsonPath not informed.`);
+        (0, log_1.info)(`Parameter packageJsonPath not informed.`, quietMode);
     }
-    core.info(`Reading '${packageJsonPath}' file`);
+    (0, log_1.info)(`Reading '${packageJsonPath}' file`, quietMode);
     return packageJsonPath;
 }
 function validateDependencies() {
-    const packageJsonPath = getPackageJsonPath();
     const quietMode = getQuietMode();
+    const packageJsonPath = getPackageJsonPath(quietMode);
     (0, check_dependencies_1.default)(packageJsonPath, quietMode);
 }
 exports["default"] = validateDependencies;
