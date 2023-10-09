@@ -2,21 +2,28 @@
 
 import * as core from '@actions/core'
 import checkDependencies from './check_dependencies'
-import {packageJsonPathDefault, packageJsonPathKey} from './constants'
+import {packageJsonPathDefault, packageJsonPathKey, quietModeKey} from './constants'
+import {info} from './log'
 
-function getPackageJsonPath(): string {
+function getQuietMode(): boolean {
+    const quietMode = core.getInput(quietModeKey)
+    return quietMode === 'true'
+}
+
+function getPackageJsonPath(quietMode: boolean): string {
     let packageJsonPath = core.getInput(packageJsonPathKey)
     if (!packageJsonPath) {
         packageJsonPath = packageJsonPathDefault
-        core.info(`Parameter packageJsonPath not informed.`)
+        info(`Parameter packageJsonPath not informed.`, quietMode)
     }
-    core.info(`Reading '${packageJsonPath}' file`)
+    info(`Reading '${packageJsonPath}' file`, quietMode)
     return packageJsonPath
 }
 
 function validateDependencies(): void {
-    const packageJsonPath = getPackageJsonPath()
-    checkDependencies(packageJsonPath)
+    const quietMode = getQuietMode()
+    const packageJsonPath = getPackageJsonPath(quietMode)
+    checkDependencies(packageJsonPath, quietMode)
 }
 
 export default validateDependencies

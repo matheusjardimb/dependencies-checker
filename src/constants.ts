@@ -8,6 +8,7 @@ const validVersionDescriptorsKey = 'valid-descriptors'
 
 const invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-']
 const packageJsonPathKey = 'packageJsonPath'
+const quietModeKey = 'quiet'
 const packageJsonPathEnvKey = `INPUT_${packageJsonPathKey.toUpperCase()}`
 
 const packageJsonPathDefault = 'package.json'
@@ -18,6 +19,7 @@ const libSettingsDefault = {
 }
 
 export {
+    quietModeKey,
     libSettingsKey,
     libSettingsDefault,
     invalidVersionDescriptorsDefault,
