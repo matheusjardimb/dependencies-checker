@@ -39,7 +39,7 @@
     "find-duplicated-property-keys": "1.2.9"
   },
   "devDependencies": {
-    "@types/find-duplicated-property-keys": "1.1.1",
+    "@types/find-duplicated-property-keys": "1.1.2",
     "@types/jest": "29.5.5",
     "@types/mri": "1.1.2",
     "@types/node": "20.8.7",
