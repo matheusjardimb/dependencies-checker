@@ -40,7 +40,7 @@ Add the following to specify a custom `package.json` path:
       - uses: matheusjardimb/dependencies-checker@latest
         with:
           packageJsonPath: 'app/package.json'
-          quite: true
+          quiet: true
 ```
 
 ### Gitlab
