@@ -43,7 +43,7 @@ jobs:
         id: diff
 
       # If index.ts was different from expected, upload the expected version as an artifact
-      - uses: actions/upload-artifact@v4.0.0
+      - uses: actions/upload-artifact@v4.1.0
         if: ${{ failure() && steps.diff.conclusion == 'failure' }}
         with:
           name: dist
