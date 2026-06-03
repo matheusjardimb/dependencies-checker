@@ -15,7 +15,7 @@ jobs:
   self_test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
+      - uses: actions/checkout@v6.0.3
 
       - uses: actions/setup-node@v5.0.0
         with:
