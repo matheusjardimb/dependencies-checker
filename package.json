@@ -35,7 +35,7 @@
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "dependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "3.0.1",
     "find-duplicated-property-keys": "1.2.9"
   },
   "devDependencies": {
