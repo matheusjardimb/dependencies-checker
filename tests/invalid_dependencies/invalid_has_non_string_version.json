@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@actions/core": {
+      "version": "1.9.1"
+    }
+  }
+}

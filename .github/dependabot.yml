@@ -4,9 +4,19 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      github-actions:
+        patterns:
+          - '*'
 
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      # Major versions keep their own PR, since they are the updates that can break the build
+      npm-minor-and-patch:
+        update-types:
+          - minor
+          - patch

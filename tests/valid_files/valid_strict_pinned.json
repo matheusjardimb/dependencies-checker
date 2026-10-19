@@ -1,0 +1,13 @@
+{
+  "dependencies-checker": {
+    "strict": true
+  },
+  "dependencies": {
+    "@actions/core": "1.9.1",
+    "jest": "30.0.0-alpha.6",
+    "lodash-es": "npm:lodash-es@4.17.21",
+    "my-fork": "github:user/repo#0f1e2d3c4b5a69788796a5b4c3d2e1f0a9b8c7d6",
+    "local-lib": "file:../local-lib",
+    "tarball": "https://example.com/pkg-1.0.0.tgz"
+  }
+}

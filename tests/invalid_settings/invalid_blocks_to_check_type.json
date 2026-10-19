@@ -1,0 +1,8 @@
+{
+  "dependencies-checker": {
+    "blocks-to-check": 5
+  },
+  "dependencies": {
+    "@actions/core": "1.9.1"
+  }
+}

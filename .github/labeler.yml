@@ -1,12 +1,18 @@
 repo:
-  - '*'
+  - changed-files:
+      - any-glob-to-any-file: '*'
 source:
-  - src/**/*
+  - changed-files:
+      - any-glob-to-any-file: src/**/*
 action:
-  - action.yml
+  - changed-files:
+      - any-glob-to-any-file: action.yml
 tests:
-  - tests/**/*
+  - changed-files:
+      - any-glob-to-any-file: tests/**/*
 automation:
-  - .github/workflows/*
+  - changed-files:
+      - any-glob-to-any-file: .github/workflows/*
 docs:
-  - '*.md'
+  - changed-files:
+      - any-glob-to-any-file: '*.md'

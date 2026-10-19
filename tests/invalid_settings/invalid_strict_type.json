@@ -1,0 +1,8 @@
+{
+  "dependencies-checker": {
+    "strict": "yes"
+  },
+  "dependencies": {
+    "@actions/core": "1.9.1"
+  }
+}

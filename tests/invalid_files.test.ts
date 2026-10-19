@@ -1,6 +1,6 @@
 import {describe, expect, it} from '@jest/globals'
 import {InvalidPackageFileError} from '../src/errors'
-import {get_test_file_names, setInput} from '../src/utils'
+import {get_test_file_names, setInput} from './utils'
 import {packageJsonPathKey} from '../src/constants'
 import validateDependencies from '../src/run_checker'
 

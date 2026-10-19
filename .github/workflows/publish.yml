@@ -7,33 +7,39 @@ name: 'Publish'
 # Manual or automatic release
 on:
   release:
-    types: [ published, edited ]
+    types: [ published ]
+
+permissions:
+  contents: read
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       # Release with semantic tag like v1.0.3
       - name: Checkout
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.release.tag_name }}
 
       - name: Setup Node
-        uses: actions/setup-node@v5.0.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
 
       - run: npm ci && npm run build
       # Compile dist/index.ts and bundle with action.yml
 
       # Force push major and minor tags, e.g. v1, v1.0
       # See documentation: https://github.com/JasonEtco/build-and-tag-action
-      - uses: JasonEtco/build-and-tag-action@v2.0.1
+      - uses: JasonEtco/build-and-tag-action@dd5e4991048c325f6d85b4155e586fc211c644da # v2.0.1
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: |
-          npm adduser
-          npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # Authenticates with npm trusted publishing (OIDC), which also adds provenance. Needs npm 11.5.1+
+      # and this workflow registered as a trusted publisher on npmjs.com. `prepack` rebuilds dist/ first.
+      - run: npm publish
