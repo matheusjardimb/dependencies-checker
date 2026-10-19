@@ -1,0 +1,21 @@
+# Categories for GitHub's automatically generated release notes, based on the labels from .github/labeler.yml and
+# Dependabot. See https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
+changelog:
+  categories:
+    - title: Checker changes
+      labels:
+        - source
+        - action
+    - title: Dependency updates
+      labels:
+        - dependencies
+    - title: Documentation
+      labels:
+        - docs
+    - title: Tests and automation
+      labels:
+        - tests
+        - automation
+    - title: Other changes
+      labels:
+        - '*'

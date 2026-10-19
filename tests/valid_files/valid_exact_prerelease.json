@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@actions/core": "1.9.1",
+    "next": "15.0.0-canary.1",
+    "lodash-es": "npm:lodash-es@4.17.21"
+  },
+  "devDependencies": {
+    "jest": "30.0.0-alpha.6"
+  }
+}

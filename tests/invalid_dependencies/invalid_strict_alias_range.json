@@ -1,0 +1,9 @@
+{
+  "dependencies-checker": {
+    "strict": true
+  },
+  "dependencies": {
+    "@actions/core": "1.9.1",
+    "some-package": "npm:lodash-es@4"
+  }
+}

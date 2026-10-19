@@ -1,0 +1,12 @@
+{
+  "dependencies-checker": {
+    "strict": true,
+    "ignored-dependencies": [
+      "react"
+    ]
+  },
+  "dependencies": {
+    "@actions/core": "1.9.1",
+    "react": "18"
+  }
+}

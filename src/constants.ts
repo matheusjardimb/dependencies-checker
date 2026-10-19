@@ -2,9 +2,10 @@ const libSettingsKey = 'dependencies-checker'
 const blocksToCheckKey = 'blocks-to-check'
 
 const ignoredDependenciesKey = 'ignored-dependencies'
-const ignoredDependenciesDefault = ['']
+const ignoredDependenciesDefault: string[] = []
 
 const validVersionDescriptorsKey = 'valid-descriptors'
+const strictModeKey = 'strict'
 
 const invalidVersionDescriptorsDefault = ['latest', '^', '~', 'x', '*', '>', '<', '|', '-']
 const packageJsonPathKey = 'packageJsonPath'
@@ -13,10 +14,7 @@ const packageJsonPathEnvKey = `INPUT_${packageJsonPathKey.toUpperCase()}`
 
 const packageJsonPathDefault = 'package.json'
 
-const libSettingsDefault = {
-    // blocksToCheckKey:[]
-    ignoredDependenciesKey: []
-}
+const libSettingsDefault = {}
 
 export {
     quietModeKey,
@@ -24,6 +22,7 @@ export {
     libSettingsDefault,
     invalidVersionDescriptorsDefault,
     validVersionDescriptorsKey,
+    strictModeKey,
     blocksToCheckKey,
     ignoredDependenciesKey,
     packageJsonPathKey,

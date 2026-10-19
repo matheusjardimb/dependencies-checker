@@ -1,0 +1,120 @@
+##
+# Lints, tests, checks the committed dist/ and runs the action on itself
+##
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format-check
+
+  test:
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest ]
+        node: [ 18, 20, 22, 24 ]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - run: npm ci
+      - run: npx jest --coverage
+
+  # `dist/index.js` is what runs when a workflow uses this action, so it must match the sources
+  check-dist:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Rebuild the dist/ directory
+        run: npm run build && npm run package
+
+      - name: Compare the expected and actual dist/ directories
+        id: diff
+        run: |
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build. Run 'npm run all' and commit dist/. See diff below:"
+            git diff --stat dist/
+            exit 1
+          fi
+
+      # If dist/ was different from expected, upload the expected version as an artifact
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+        with:
+          name: dist
+          path: dist/
+
+  # Runs the committed action the same way consumers do
+  self-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Check this repository's package.json
+        uses: ./
+
+      - name: Check several files at once
+        uses: ./
+        with:
+          packageJsonPath: |
+            package.json
+            tests/valid_files/*.json
+          quiet: true
+
+      - name: Check a file that must fail
+        id: expected-failure
+        continue-on-error: true
+        uses: ./
+        with:
+          packageJsonPath: tests/invalid_dependencies/invalid_has_caret.json
+
+      - name: Assert the invalid file failed
+        if: ${{ steps.expected-failure.outcome != 'failure' }}
+        run: |
+          echo "The action accepted an invalid package.json"
+          exit 1
+
+      - name: Run as a command line tool
+        run: |
+          node dist/index.js --quiet package.json
+          if node dist/index.js --quiet tests/invalid_dependencies/invalid_has_caret.json; then
+            echo "The command line accepted an invalid package.json"
+            exit 1
+          fi

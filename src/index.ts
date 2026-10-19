@@ -5,9 +5,8 @@ import validateDependencies from './run_checker'
 
 async function runChecker(): Promise<void> {
     try {
-        validateDependencies()
+        validateDependencies(process.argv.slice(2))
     } catch (error) {
-        core.error(error as Error)
         core.setFailed(error as Error)
     }
 }
